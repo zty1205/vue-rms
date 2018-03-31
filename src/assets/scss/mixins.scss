@@ -1,0 +1,32 @@
+@mixin flexCenter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@mixin stickFooter {
+    font-size: 1rem;
+    min-height: calc(100vh - 7rem);
+    padding-top: .75rem;
+    width: 100%;
+}
+
+@mixin no-wrap {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+@mixin mediaQ($arg...) {
+    @if length($arg) == 1 {
+        @media screen and (max-width: nth($arg, 1)) {
+            @content;
+        }
+    }
+
+    @if length($arg) == 2 {
+        @media screen and (max-width: nth($arg, 1)) and (min-width: nth($arg, 2)) {
+            @content;
+        }
+    }
+}

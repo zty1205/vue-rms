@@ -1,0 +1,43 @@
+// 后端nodejs的入口文件
+const express = require('express')
+
+//  express中间件，作用是对post请求的请求体进行解析
+const bodyParser = require('body-parser')
+const imageRoutes = require('./api/image')
+
+// 在单页应用中，处理当刷新页面或直接在地址栏访问非根页面的时候，
+// 返回404的bug。匹配非文件（路径中不带.）的get请求。Cli中已经有 无需安装
+const history = require('connect-history-api-fallback')
+const mongoose = require('mongoose')
+const env = process.env.NODE_ENV || 'development'
+
+// connect db 开发模式下
+if (env === 'development') {
+    dbUrl = 'mongodb://localhost:27017/vnpastime'
+}
+
+mongoose.connect(dbUrl)
+mongoose.Promise = global.Promise
+
+const app = express()
+
+// 使用bodyParser.json() 解析json格式的请求体
+app.use(bodyParser.json())
+app.use('/api', imageRoutes)
+
+app.use(history())
+
+// 使用内置中间件 将`webpack`打包后的`dist`作为静态资源
+if (env !== 'development') {
+  app.use(express.static('./dist'))
+}
+
+// 错误处理 中间件
+app.use((err, req, res, next) => {
+    res.status(442).send({ error: err.message })
+  })
+
+// 监听4000端口
+const server = app.listen(4000, () => {
+console.log(`Express started in ${app.get('env')} mode on http://localhsot:4000`)
+})
