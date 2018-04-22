@@ -21,7 +21,11 @@
                 组织管理
             </template>
             <MenuGroup title="员工">
-                <MenuItem name="3-1"> 员工信息 </MenuItem>
+                <MenuItem name="3-1">
+                  <router-link to="/employee/list" class="link-item">
+                    员工信息
+                  </router-link>
+                </MenuItem>
                 <MenuItem name="3-2"> 添加员工 </MenuItem>
             </MenuGroup>
             <MenuGroup title="考勤与工薪">

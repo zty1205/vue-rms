@@ -1,4 +1,5 @@
-import axios from '../utils/axiosService'
+// import axios from '../utils/axiosService'
+import axios from 'axios'
 export const fetchImages = (count) => {
   console.log('all')
   return axios.get(`/api/images?count=${count}`)

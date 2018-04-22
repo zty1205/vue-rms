@@ -4,6 +4,7 @@ import index from '@/components/index/index';
 import images from '@/components/image/ImageList';
 import ImageBanner from '@/components/image/ImageBanner';
 import NotePad from '@/components/notepad/NotePad';
+import employeeList from '@/components/employee/employeeList';
 
 Vue.use(Router)
 
@@ -23,6 +24,15 @@ export default new Router({
           path: ':id',
           component: ImageBanner
         }]
+      },
+      {
+        // path: '/images',
+        path: '/employee/list',
+        component: employeeList
+        // children: [{
+        //   path: 'list',
+        //   component: employeeList
+        // }]
       },
       {
         path: '/NotePad',

@@ -4,7 +4,11 @@
             <span style="text-align:center;">zty管理系统</span>
         </Col>
         <Col span="12">
-            <Icon type="calendar" :size=30 color="white"></Icon>
+          <a class="loginOut" @click="LoginOut">退出</a>
+          <span class="welcome">欢迎  {{ nowUser }} </span>
+          <DatePicker :open="open" type="date" :value="value" class="head_calendar">
+            <Icon :style="{cursor: 'pointer'}" class="calendarIcon" type="calendar" size=30 @click.native="handleClick"></Icon>
+          </DatePicker>
 
             <Dropdown trigger="custom" :visible="visible" >
                 <a href="javascript:void(0)" @click="handleOpen">
@@ -33,17 +37,49 @@
 export default {
         data () {
             return {
-                visible: false
+                visible: false,
+                open: false,
+                value: new Date(),
+                nowUser: "admin"
             }
         },
         methods: {
+            handleClick () {
+              this.open = !this.open;
+            },
             handleOpen () {
                 this.visible = true;
             },
             handleClose () {
                 this.visible = false;
+            },
+            LoginOut() {
+              this.$router.push({path: '/login'})
             }
         }
     }
 </script>
 
+<style scoped>
+  .head_calendar{
+    float: right;
+    margin: 16px 6px;
+  }
+  .calendarIcon{
+    margin-right: 10px;
+  }
+  .loginOut{
+    float: right;
+    font-size: 14px;
+    margin: 3px 8px;
+  }
+  .welcome{
+    font-size: 16px;
+    float: right;
+    font-weight: bold;
+    color: burlywood;
+    margin: 2px 8px;
+  }
+
+
+</style>

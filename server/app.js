@@ -5,6 +5,8 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const imageRoutes = require('./api/image')
 
+const employeeRoutes = require('./api/employee')
+
 // 在单页应用中，处理当刷新页面或直接在地址栏访问非根页面的时候，
 // 返回404的bug。匹配非文件（路径中不带.）的get请求。Cli中已经有 无需安装
 const history = require('connect-history-api-fallback')
@@ -21,9 +23,18 @@ mongoose.Promise = global.Promise
 
 const app = express()
 
+app.get('*',(req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Content-Type,Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild');
+  res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE,OPTIONS')
+  next()
+  })
+
+
 // 使用bodyParser.json() 解析json格式的请求体
 app.use(bodyParser.json())
 app.use('/api', imageRoutes)
+app.use('/employee/list', employeeRoutes)
 
 app.use(history())
 

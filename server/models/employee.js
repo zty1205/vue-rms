@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 // 企业员工 MongoDB Schema模型
-const StaffSchema = new Schema({
+const EmployeeSchema = new Schema({
     id: {
         type: String,
         required: [true, 'Name fields is required'],
@@ -29,10 +29,8 @@ const StaffSchema = new Schema({
     authority: Number, //权限
     attendance: Array, // 考勤表
     wages: Array, // 工资表
-    phone: String,
-    address: String
 })
 
-const Staff = mongoose.model('Staff', StaffSchema)
+const Employee = mongoose.model('Employee', EmployeeSchema)
 
-module.exports = Staff
+module.exports = Employee
