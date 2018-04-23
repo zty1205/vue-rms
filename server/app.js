@@ -18,7 +18,13 @@ if (env === 'development') {
     dbUrl = 'mongodb://localhost:27017/vnpastime'
 }
 
-mongoose.connect(dbUrl)
+mongoose.connect(dbUrl,function (err) {
+  if(err){
+    console.warn('数据库连接失败：'+err);
+  }else {
+    console.log('数据库成功连接到：'+dbUrl);
+  }
+})
 mongoose.Promise = global.Promise
 
 const app = express()
@@ -34,7 +40,7 @@ app.get('*',(req, res, next) => {
 // 使用bodyParser.json() 解析json格式的请求体
 app.use(bodyParser.json())
 app.use('/api', imageRoutes)
-app.use('/employee/list', employeeRoutes)
+app.use('/employee', employeeRoutes)
 
 app.use(history())
 
@@ -50,5 +56,5 @@ app.use((err, req, res, next) => {
 
 // 监听4000端口
 const server = app.listen(4000, () => {
-console.log(`Express started in ${app.get('env')} mode on http://localhsot:4000`)
+console.log(`Express started in ${app.get('env')} mode on http://localhost:4000`)
 })

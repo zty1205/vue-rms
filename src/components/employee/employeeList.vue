@@ -12,20 +12,20 @@
         return {
           columns: [
             {
+              title: 'Id',
+              key: 'id'
+            },
+            {
               title: 'Name',
               key: 'name'
             },
             {
-              title: 'Followers',
-              key: 'followers'
+              title: 'age',
+              key: 'age'
             },
             {
-              title: 'Role',
+              title: 'role',
               key: 'role'
-            },
-            {
-              title: 'Time',
-              key: 'created_at'
             }
           ],
           data: []
@@ -37,9 +37,10 @@
       methods:{
         initList() {
           console.log('in init')
-          fetchEmployeeList(0, 10).then((res)=>{
+          fetchEmployeeList().then(res=>{
             console.log('in fetch')
             console.log(res)
+            this.data = res.data
           })
         }
       }

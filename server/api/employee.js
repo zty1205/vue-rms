@@ -2,13 +2,17 @@ const express = require('express')
 const router = express.Router()
 const employee = require('../models/employee')
 
-router.use('/employee/list', (req, res, next) => {
-  const start = req.params.start
-  const num = req.params.num
+router.get('/test', (req, res, next) => {   // 路由为 4000/employee/list
+  console.log('in back test')
+  res.send('hello test')
+})
+
+router.get('/list', (req, res, next) => {   // 路由为 4000/employee/list
   console.log('in back router')
-  employee.find({}).limit(num).then(employees => {
-    res.send(employees)
-  }).catch(next)
+  employee.find({}).then(employee => {
+    console.log(employee)
+    res.send(employee)
+  })
 })
 
 module.exports = router
