@@ -2,10 +2,12 @@
     <div>
         <h2>员工信息列表</h2>
       <Table :columns="columns" :data="data"></Table>
+      <employee-add></employee-add>
     </div>
 </template>
 
 <script>
+  import employeeAdd from './employeeAdd.vue'
   import {fetchEmployeeList} from '../../api/employee'
     export default {
       data(){
@@ -30,6 +32,9 @@
           ],
           data: []
         }
+      },
+      components: {
+        employeeAdd
       },
       mounted(){
         this.initList()
