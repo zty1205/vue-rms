@@ -1,11 +1,12 @@
 import axios from 'axios'
 // import store from '../store/store'
 
-let baseURL = 'http://www.xxxuthus.cn/'
-if (process.env.NODE_ENV === 'development') {
-  baseURL = 'http://localhost:8080'
-}
-
+// let baseURL = 'http://www.xxxuthus.cn/'
+// if (process.env.NODE_ENV === 'development') {
+//   baseURL = 'http://localhost:8080'
+// }
+// let baseURL = 'http://localhost:8080'
+let baseURL = '/api'
 // 创建axios实例
 const service = axios.create({
   baseURL: baseURL,

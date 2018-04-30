@@ -37,7 +37,20 @@
           </TimelineItem>
         </Timeline>
         </Col>
-        <Col span="12">col-12</Col>
+        <Col span="12">
+          <h4>测试数据库添加</h4>
+          <Form :model="formLeft" label-position="left" :label-width="100">
+            <FormItem label="EID">
+              <Input v-model="formLeft.eid" />
+            </FormItem>
+            <FormItem label="NAME">
+              <Input v-model="formLeft.name" />
+            </FormItem>
+            <FormItem>
+              <Button type="primary" @click="handleSubmit">Submit</Button>
+            </FormItem>
+          </Form>
+        </Col>
       </Row>
 
     </div>
@@ -45,8 +58,28 @@
 
 <script>
 // 首页 介绍公司
+import { addEmployee } from '../../api/employee'
 export default {
-
+  data(){
+    return {
+      formLeft: {
+        eid: '',
+        name: ''
+      },
+      keepData: {}
+    }
+  },
+  methods: {
+    handleSubmit(){
+      let form = this.formLeft
+      console.log(form)
+      addEmployee(form).then(res=>{
+        console.log(res)
+        this.keepData = res.data
+        console.log(this.keepData)
+      })
+    }
+  }
 }
 </script>
 

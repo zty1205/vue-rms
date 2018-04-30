@@ -29,17 +29,17 @@ mongoose.Promise = global.Promise
 
 const app = express()
 
-app.get('*',(req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Content-Type,Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild');
-  res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE,OPTIONS')
-  next()
-  })
+// app.all('*',(req, res, next) => {  // 用get 可能只有get请求有用
+//   res.header('Access-Control-Allow-Origin', '*');
+//   res.header('Access-Control-Allow-Headers', 'Content-Type,Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild');
+//   res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE,OPTIONS')
+//   next()
+//   })
 
 
 // 使用bodyParser.json() 解析json格式的请求体
 app.use(bodyParser.json())
-app.use('/api', imageRoutes)
+// app.use('/api', imageRoutes)
 app.use('/employee', employeeRoutes)
 
 app.use(history())

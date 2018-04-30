@@ -3,7 +3,7 @@ const Schema = mongoose.Schema
 
 // 企业员工 MongoDB Schema模型
 const employeeSchema = new Schema({
-    id: String,
+    eid: String,
     name: String,
     age: String,
     role: String

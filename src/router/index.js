@@ -12,6 +12,8 @@ export default new Router({
     mode:'history',
     base:__dirname,
     routes: [
+      // 默认展示index界面 重定向
+      {path: '/',redirect: '/index'},
       {
         path: '/index',
         component: index
@@ -37,8 +39,7 @@ export default new Router({
       {
         path: '/NotePad',
         component: NotePad
-      },
-      // 默认展示index界面 重定向
-      {path: '/',redirect: '/index'}
+      }
+
     ]
 })

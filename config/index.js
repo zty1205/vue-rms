@@ -11,9 +11,12 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-    	'/api':{ // 用 ./api 代替 4000  我们需要请求4000端口时候 就可以写成请求 ./api (实际还是请求了4000) 也不会因为跨域报错
+    	'/api':{ // 用 /api 代替 4000  我们需要请求4000端口时候 就可以写成请求 /api (实际还是请求了4000) 也不会因为跨域报错
         target: 'http://localhost:4000',
-        changeOrigin: true
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': '/'
+        }
       }
     },
 
