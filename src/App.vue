@@ -1,22 +1,22 @@
 <template>
   <div id="app">
-    <my-container></my-container>
+    <my-login></my-login>
   </div>
 </template>
 
 <script>
-import MyContainer from './components/MyContainer'
+import MyLogin from './components/views/login'
 export default {
   name: 'App',
   components: {
-    MyContainer
+    MyLogin
   }
 }
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  /*font-family: 'Avenir', Helvetica, Arial, sans-serif;*/
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;

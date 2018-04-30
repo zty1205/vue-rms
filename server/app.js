@@ -3,8 +3,8 @@ const express = require('express')
 
 //  express中间件，作用是对post请求的请求体进行解析
 const bodyParser = require('body-parser')
+const userRoutes = require('./api/user')
 const imageRoutes = require('./api/image')
-
 const employeeRoutes = require('./api/employee')
 
 // 在单页应用中，处理当刷新页面或直接在地址栏访问非根页面的时候，
@@ -29,6 +29,7 @@ mongoose.Promise = global.Promise
 
 const app = express()
 
+// 如果没有使用webpack代理 可以使用服务端连接权限控制 来处理跨域请求
 // app.all('*',(req, res, next) => {  // 用get 可能只有get请求有用
 //   res.header('Access-Control-Allow-Origin', '*');
 //   res.header('Access-Control-Allow-Headers', 'Content-Type,Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild');
@@ -38,8 +39,10 @@ const app = express()
 
 
 // 使用bodyParser.json() 解析json格式的请求体
+// 请求 4000/user/* 的请求 都会匹配到
 app.use(bodyParser.json())
-// app.use('/api', imageRoutes)
+// app.use('/api', userRoutes)
+app.use('/user', userRoutes)
 app.use('/employee', employeeRoutes)
 
 app.use(history())

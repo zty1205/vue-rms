@@ -12,8 +12,10 @@ const store = new Vuex.Store({
     videos: [],
     // token: localStorage.getItem('vn-token'),
     user: { // 登录者信息
+      uid: '',
       name: '',
-      id: '',
+      password: '',
+      authorization: '',
       avatar_url: ''
     },
     // 判断是登入还是注册
