@@ -68,11 +68,27 @@
                   user.password = ''
                 }
                 let data = res.data
-                if(data && data.result == 0){
+                if(data && data.success){
                   console.log('login success')
                   // to do  存储登录信息 到store
+                  this.$Message.loading({
+                    top: 200,
+                    content: '正在登录，请稍后 ...',
+                    duration: 2,     // load框显示2秒
+                    onClose: () => {  //  关闭时的回调
+                      // 路由跳转
+                      console.log('close in router dump')
+                      this.$router.push({path: '/index'})
+                    }
+                  })
+                  // vuex store 存储处理
+                  let saveUser = data.info
+                  this.$store.commit('SET_LOGIN_USER',saveUser) // 用vue-devtools 可以看到vuex里的数据
                 }else {
-                  console.log('login defeat')
+                  this.$Message.error({
+                    content: '登录失败，请重试 ...',
+                    duration: 1
+                  })
                 }
               })
             } else {
@@ -113,6 +129,9 @@
   .container {
     width: 60%;
     margin: 0 auto;
+  }
+  .container h1 {
+    margin-bottom: 40px;
   }
   .ivu-form-item {
     /* 覆盖iview原本的样式 */

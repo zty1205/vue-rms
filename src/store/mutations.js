@@ -5,6 +5,7 @@ import User from '../api/user'
 const mutations = {
 // 用户登录 存储登录人员信息
   [types.SET_LOGIN_USER] (state, data) {
+    console.log('in mutations')
       state.user = data
   },
 

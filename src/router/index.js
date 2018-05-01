@@ -5,7 +5,7 @@ import images from '@/components/image/ImageList';
 import ImageBanner from '@/components/image/ImageBanner';
 import NotePad from '@/components/notepad/NotePad';
 import employeeList from '@/components/employee/employeeList';
-// import login from '@/components/views/login';
+import login from '@/components/views/login';
 // const login = resolve => require(['../components/views/login.vue'], resolve)
 
 Vue.use(Router)
@@ -15,11 +15,15 @@ export default new Router({
     base:__dirname,
     routes: [
       // 默认展示index界面 重定向
-      {path: '/',redirect: '/index'},
+      {path: '/',redirect: '/login'},
       // {
       //   path: '/login',
       //   component: login
       // },
+      {
+        path: '/login',
+        component: login
+      },
       {
         path: '/index',
         component: index

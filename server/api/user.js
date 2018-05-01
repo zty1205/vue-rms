@@ -20,14 +20,14 @@ router.post('/login',(req,res,next)=>{
     console.log('find mongodb' + user)
     if(user){
       res.json({
-        result: 0,
+        success: true,
         msg: '登录成功',
         info: user
       })
       // res.send(user)
     }else {
       res.json({
-        result: 1,
+        success: false,
         msg: '该用户不存在',
         info: null
       })
