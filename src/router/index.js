@@ -6,6 +6,7 @@ import NotePad from '@/components/notepad/NotePad';
 import employeeList from '@/components/employee/employeeList';
 import login from '@/components/views/login';
 import home from '@/components/views/home';
+import index from '@/components/index/index';
 // const login = resolve => require(['../components/views/login.vue'], resolve)
 
 Vue.use(Router)

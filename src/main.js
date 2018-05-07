@@ -5,7 +5,7 @@ import App from './App'
 import store from './store/store'
 import VueLazyload from 'vue-lazyload'
 // 引入配置的router文件
-import router from './router';
+import router from './router/index';
 import iView from 'iview';
 import 'iview/dist/styles/iview.css';
 

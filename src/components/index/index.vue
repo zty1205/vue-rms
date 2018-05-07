@@ -104,7 +104,6 @@ export default {
     line-height: 30px;
     margin-bottom: 5px;
     margin-left: 20px;
-    border: 1px solid red;
   }
   .item-box:hover{
     opacity: 1;
