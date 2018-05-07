@@ -2,7 +2,7 @@
     <div>
         <h2>员工信息列表</h2>
       <Table :columns="columns" :data="data"></Table>
-      <employee-add></employee-add>
+      <!--<employee-add></employee-add>-->
     </div>
 </template>
 

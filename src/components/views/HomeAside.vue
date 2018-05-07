@@ -2,14 +2,14 @@
     <Menu theme="dark" accordion="accordion" width="auto">
 
         <MenuItem name="1">
-            <router-link to="/index" class="link-item">
+            <router-link to="/home/index" class="link-item">
                 <Icon type="home" class="icon-item"></Icon>
               <span class="font-item">首&emsp;&emsp;页</span>
             </router-link>
         </MenuItem>
 
         <MenuItem name="2">
-          <router-link to="/images" class="link-item">
+          <router-link to="/home/images" class="link-item">
             <Icon type="images" class="icon-item"></Icon>
             <span class="font-item">员工相册</span>
           </router-link>
@@ -22,7 +22,7 @@
             </template>
             <MenuGroup title="员工">
                 <MenuItem name="3-1">
-                  <router-link to="/employee/list" class="link-item">
+                  <router-link to="/home/employee/list" class="link-item">
                     员工信息
                   </router-link>
                 </MenuItem>
@@ -48,12 +48,24 @@
           <span class="font-item">统计分析</span>
         </MenuItem>
 
-        <MenuItem name="6" class="icon-item">
-            <router-link to="/NotePad" class="link-item">
-                <Icon type="hammer" class="icon-item"></Icon>
+        <Submenu name="6">
+          <template slot="title">
+            <Icon type="briefcase"></Icon>
+            其他工具
+          </template>
+          <MenuItem name="6-1">
+            <router-link to="/home/NotePad" class="link-item">
+              <Icon type="hammer" class="icon-item"></Icon>
               <span class="font-item">记&ensp;事&ensp;本</span>
             </router-link>
-        </MenuItem>
+          </MenuItem>
+          <MenuItem name="6-2">
+            <router-link to="/home/clock" class="link-item">
+              <Icon type="clock"></Icon>
+              <span class="font-item">钟  表</span>
+            </router-link>
+          </MenuItem>
+        </Submenu>
 
         <MenuItem name="7">
             <Icon type="android-person" class="icon-item"></Icon>

@@ -75,11 +75,11 @@
                 this.$Message.loading({
                   top: 200,
                   content: '正在登录，请稍后 ...',
-                  duration: 2,     // load框显示2秒
+                  duration: 1,     // load框显示2秒
                   onClose: () => {  //  关闭时的回调
                     // 路由跳转
                     console.log('close in router dump')
-                    this.$router.push({path: '/index'})
+                    this.$router.push({path: '/home'})
                   }
                 })
                 // vuex store 存储处理
@@ -126,6 +126,7 @@
     opacity: 0.8;
     background: linear-gradient(to bottom right,#50a3a2,#53e3a6);
     background: -webkit-linear-gradient(to bottom right,#50a3a2,#53e3a6);
+    box-shadow: 0 0 30px 3px grey;
   }
   .container {
     width: 60%;
@@ -170,7 +171,7 @@
     -webkit-animation: square 25s 10;
   }
   .wrap ul li:nth-child(1) {
-    left: 0;
+    left: 5px;
     width: 30px;
     height: 30px;
     animation-duration: 10s;
@@ -221,7 +222,7 @@
       transform: translateY(0)
     }
     100% {
-      bottom: 400px;
+      bottom: 390px;
       transform: rotate(600deg);
       -webit-transform: rotate(600deg);
       -webkit-transform: translateY(-500);

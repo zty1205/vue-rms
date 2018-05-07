@@ -2,7 +2,8 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import images from '@/components/image/ImageList';
 import ImageBanner from '@/components/image/ImageBanner';
-import NotePad from '@/components/notepad/NotePad';
+import NotePad from '@/components/tools/NotePad';
+import clock from '@/components/tools/clock';
 import employeeList from '@/components/employee/employeeList';
 import login from '@/components/views/login';
 import home from '@/components/views/home';
@@ -17,7 +18,6 @@ export default new Router({
   routes: [
     // 默认展示index界面 重定向
     {path: '/',redirect: '/login'},
-    {path: '/home',redirect: '/home/index'},
     // {
     //   path: '/login',
     //   component: login
@@ -30,12 +30,14 @@ export default new Router({
       path: '/home',
       component: home,
       children:[
+        {path: '/home/',redirect: '/home/index'},
+        // 二级路由如果写成 / index 就会变成一件路由 即使在children内
         {
-          path: '/index',
+          path: 'index',
           component: index
         },
         {
-          path: '/images',
+          path: 'images',
           component: images,
           children: [{
             path: ':id',
@@ -43,12 +45,16 @@ export default new Router({
           }]
         },
         {
-          path: '/employee/list',
+          path: 'employee/list',
           component: employeeList
         },
         {
-          path: '/NotePad',
+          path: 'NotePad',
           component: NotePad
+        },
+        {
+          path: 'clock',
+          component: clock
         }
       ]
     }
