@@ -2,28 +2,30 @@
   <div class="wrap">
     <div class="container">
       <h1>Welcome</h1>
-      <Form ref="loginForm" :model="loginForm" :rules="loginValidate" :label-width="100" label-position="left">
-        <FormItem label="UID" prop="uid">
-          <Input v-model="loginForm.uid" size="large" placeholder="Please enter your uid..." />
-        </FormItem>
-        <FormItem label="Password" prop="password">
-          <Input v-model="loginForm.password" type="password" size="large" placeholder="Please enter your password..." />
-        </FormItem>
-        <div class="remember">
-          <i-switch v-model="rememberMe" size="large" class="remember-switch">
-            <span slot="open">Yes</span>
-            <span slot="close">No</span>
-          </i-switch>
-          <label class="remember-label">RememberMe</label>
-        </div>
+      <el-form ref="loginForm" :model="loginForm" label-width="100px" label-position="left" :rules="loginValidate">
+
+        <el-form-item label="UID" prop="uid">
+          <el-input v-model="loginForm.uid" size="large" placeholder="Please enter your uid..." />
+        </el-form-item>
+
+        <el-form-item label="Password" prop="password">
+          <el-input v-model="loginForm.password" type="password" size="large" placeholder="Please enter your password..." auto-complete="off"/>
+        </el-form-item>
+
+      <div class="remember">
+        <el-switch class="remember-switch" v-model="rememberMe" active-color="#13ce66" inactive-color="#ff4949"
+          active-text="Remember?"
+          inactive-text="Forget?">
+        </el-switch>
+      </div>
 
 
-        <FormItem>
-          <Button type="primary" @click="handleSubmit('loginForm')">Submit</Button>
-          <Button type="ghost" @click="handleReset('loginForm')" style="margin-left: 8px">Reset</Button>
+        <el-form-item>
+          <el-button type="primary" @click="handleSubmit('loginForm')">Submit</el-button>
+          <el-button type="info" @click="handleReset('loginForm')" style="margin-left: 8px">Reset</el-button>
         <!-- 忘记密码 再说 -->
-        </FormItem>
-      </Form>
+        </el-form-item>
+      </el-form>
     </div>
     <!-- 登录界面的动画 css3 线性渐变 动画等 -->
     <ul>
@@ -71,28 +73,30 @@
                 if(data && data.success){
                   console.log('login success')
                   // to do  存储登录信息 到store
-                  this.$Message.loading({
-                    top: 200,
-                    content: '正在登录，请稍后 ...',
-                    duration: 2,     // load框显示2秒
-                    onClose: () => {  //  关闭时的回调
-                      // 路由跳转
-                      console.log('close in router dump')
-                      this.$router.push({path: '/index'})
-                    }
-                  })
+                  // this.$message.success({
+                  //   message: '正在登录，请稍后 ...',
+                  //   duration: 2,     // load框显示2秒
+                  //   onClose: () => {  //  关闭时的回调
+                  //     // 路由跳转
+                  //     console.log('close in router dump')
+                  //     // this.$router.push({path: '/index'})
+                  //   }
+                  // })
+                  this.$message.success('正在登录请稍后 ...')
                   // vuex store 存储处理
                   let saveUser = data.info
                   this.$store.commit('SET_LOGIN_USER',saveUser) // 用vue-devtools 可以看到vuex里的数据
                 }else {
-                  this.$Message.error({
-                    content: '登录失败，请重试 ...',
-                    duration: 1
-                  })
+                  this.$message('该用户不存在 ...')
+                  // this.$Message({
+                  //   type: 'error',
+                  //   message: '登录失败，请重试 ...',
+                  //   duration: 1
+                  // })
                 }
               })
             } else {
-              this.$Message.error('Please input valid information');
+              this.$message.error('Please input valid information');
             }
           })
         },
@@ -131,13 +135,7 @@
     margin: 0 auto;
   }
   .container h1 {
-    margin-bottom: 40px;
-  }
-  .ivu-form-item {
-    /* 覆盖iview原本的样式 */
-    margin-bottom: 34px;
-    vertical-align: top;
-    zoom: 1;
+    margin-bottom: 30px;
   }
   .remember {
     margin-bottom: 24px;
@@ -145,8 +143,8 @@
     zoom: 1;
   }
   .remember-switch {
-    margin-left: -50px;
-    margin-right: 10px;
+    display: block;
+    text-align: left
   }
   .container h1 {
     text-align: center;
