@@ -11,7 +11,7 @@ router.get('/test', (req, res, next) => {   // 路由为 4000/employee/test
 router.get('/list', (req, res, next) => {   // 路由为 4000/employee/list
   console.log('in back router')
   employee.find({}).then(employee => {
-    console.log(employee)
+    // console.log(employee)
     res.send(employee)
   }).catch(next)
 })
@@ -28,7 +28,7 @@ router.get('/delete/:eid',(req,res,next) => {
       // 有返回前端就是200
       res.send('该用户不存在！')
     }else{
-      console.log(employee)
+      // console.log(employee)
       res.send(employee)
     }
   }).catch(next)

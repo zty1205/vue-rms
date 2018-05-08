@@ -15,7 +15,8 @@ const env = process.env.NODE_ENV || 'development'
 
 // connect db 开发模式下
 if (env === 'development') {
-    dbUrl = 'mongodb://localhost:27017/vnpastime'
+    // dbUrl = 'mongodb://localhost:27017/vnpastime'
+  dbUrl = 'mongodb://localhost:27017/ztyrms'
 }
 
 mongoose.connect(dbUrl,function (err) {

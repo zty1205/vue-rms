@@ -3,7 +3,7 @@ import axios from '../utils/axiosService'
 export const fetchEmployeeList = () => {
   console.log('fetchEmployeeList')
   // return axios.get(`/api/employeeList?start=${start}&num=${num}`)
-  let url = 'http://localhost:4000/employee/list'
+  let url = '/employee/list'   // 已经有webpack代理了
   return new Promise((resolve, reject)=> {
     axios.get(url).then((res)=>{
       console.log('in axios get')

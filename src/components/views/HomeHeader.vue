@@ -28,7 +28,7 @@
                 </DropdownMenu>
             </Dropdown>
 
-            <Avatar icon="person"></Avatar>
+            <Avatar :src="ava_url"></Avatar>
         </Col>
     </Row>
 </template>
@@ -42,6 +42,14 @@ export default {
                 value: new Date(),
                 nowUser: "admin"
             }
+        },
+        computed: {
+          ava_url(){
+            let src = this.$store.getters.avatarUrl + ''   // 调用vuex里的get方法
+            // let src = 'https://pacdn.500px.org/527106/49546659c55dad2d216b9bf8de1d9cd410f34cd3/2.jpg?2'
+            console.log(src)
+            return src
+          }
         },
         methods: {
             handleClick () {
