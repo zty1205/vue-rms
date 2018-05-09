@@ -1,11 +1,16 @@
 // import axios from 'axios'
 import axios from '../utils/axiosService'
-export const fetchEmployeeList = () => {
+export const fetchEmployeeList = (page,size) => {
   console.log('fetchEmployeeList')
   // return axios.get(`/api/employeeList?start=${start}&num=${num}`)
   let url = '/employee/list'   // 已经有webpack代理了
   return new Promise((resolve, reject)=> {
-    axios.get(url).then((res)=>{
+    axios.get(url,{
+      params: {
+        page: page,
+        size: size
+      }
+    }).then((res)=>{
       console.log('in axios get')
       resolve(res)
     }).catch((err)=>{

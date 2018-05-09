@@ -8,12 +8,44 @@ router.get('/test', (req, res, next) => {   // 路由为 4000/employee/test
   res.send('hello test')
 })
 
+// 获取完整的表格以及分页控制
 router.get('/list', (req, res, next) => {   // 路由为 4000/employee/list
   console.log('in back router')
-  employee.find({}).then(employee => {
-    // console.log(employee)
-    res.send(employee)
-  }).catch(next)
+  // 默认显示前10条
+  let pageString = req.query.page || 0
+  let page = parseInt(pageString)
+  let sizeString = req.query.size || 10
+  let size = parseInt(sizeString)
+  // let count = 0
+  // 这样子稍微好一点 但每次分页仍需查一次总数 应不应该单独拿出来 只允许刚开始的一次
+  employee.count({},(err,count)=>{
+    employee.find({}).limit(size).skip(page * size).then(employee => {
+      // console.log(employee)
+      // res.send(employee)
+      // console.log('ok')
+      // console.log(count)
+      res.json({
+        count: count,
+        list: employee
+      })
+      // console.log(res)
+    }).catch(next)
+  })
+  // 两次数据库操作了 要不就查全部 然后把需要的数据填入一个新的array下 再返回
+  // employee.find({}).then(employee=> {
+  //   count = employee.length
+  // })
+  // employee.find({}).limit(size).skip(page * size).then(employee => {
+  //   // console.log(employee)
+  //   // res.send(employee)
+  //   console.log('ok')
+  //   console.log(count)
+  //   res.json({
+  //     count: count,
+  //     list: employee
+  //   })
+  //   // console.log(res)
+  // }).catch(next)
 })
 
 // 根据id删除   router.get 或post 不能写其他的

@@ -1,11 +1,12 @@
 <template>
     <div>
-        <h2>员工信息列表</h2>
+        <h2 style="margin-bottom: 10px;margin-top: 6px">员工信息列表</h2>
       <Table ref="table" size="large" height="460" :loading="tableLoading" :columns="columns" :data="data"></Table>
 
-      <Page :total="data.length" :page-size-opts="PageSizeOpt" show-elevator show-sizer show-total
+      <Page :total="count" :page-size-opts="PageSizeOpt" placement="top"
+            show-elevator show-sizer show-total class="table-page"
             @on-change="tableChangePage" @on-page-size-change="tableChangeSize"
-            :current="CurrentPage" :page-size="PageSize">
+            :current.sync="CurrentPage" :page-size="PageSize">
       </Page>
 
       <div class="exportBtn">
@@ -18,10 +19,10 @@
         <Button type="primary" size="large" @click="exportData(3)">
           <Icon type="ios-download-outline"></Icon> 导出自定义数据
         </Button>
-        <label class="custom-col-label">自定义行:</label><InputNumber :max="data.length-1" :min="0" v-model="beginCol" size="small"></InputNumber>
-        <label class="custom-col-label">至</label><InputNumber :max="data.length-1" :min="0" v-model="endCol" size="small"></InputNumber>
-        <label class="custom-row-label">列:</label><InputNumber :max="columns.length-1" :min="0" v-model="beginRow" size="small"></InputNumber>
-        <label class="custom-row-label">至</label><InputNumber :max="columns.length-1" :min="0" v-model="endRow" size="small"></InputNumber>
+        <label class="custom-label">自定义行:</label><InputNumber :max="data.length-1" :min="0" v-model="beginCol" size="small"></InputNumber>
+        <label class="custom-label">至</label><InputNumber :max="data.length-1" :min="0" v-model="endCol" size="small"></InputNumber>
+        <label class="custom-label">列:</label><InputNumber :max="columns.length-1" :min="0" v-model="beginRow" size="small"></InputNumber>
+        <label class="custom-label">至</label><InputNumber :max="columns.length-1" :min="0" v-model="endRow" size="small"></InputNumber>
       </div>
 
 
@@ -59,12 +60,21 @@
           columns: [
             {
               title: 'Id',
-              key: 'eid',
-              sortable: true
+              key: 'eid'
             },
             {
               title: '名字',
-              key: 'name'
+              key: 'name',
+              render: (h, params) => {
+                return h('div', [
+                  h('Icon', {
+                    props: {
+                      type: 'person'
+                    }
+                  }),
+                  h('strong', params.row.name)
+                ]);
+              }
             },
             {
               title: '年龄',
@@ -75,8 +85,9 @@
               title: '职位',
               key: 'role',
               render:(h, params) => {
-                let _index = params.index
-                let role = this.data[_index].role
+                // let _index = params.index
+                // let role = this.data[_index].role
+                let role = params.row.role
                 return h('div',[h('label',roleMap[role])]);
               }
             },
@@ -123,9 +134,51 @@
               title: '状态',
               key: 'status',
               render:(h, params) => {
-                let _index = params.index
-                let status = this.data[_index].status
-                return h('div',[h('label',statusMap[status])]);
+                // let _index = params.index
+                // let status = this.data[_index].status
+                let status = params.row.status
+                let stat = statusMap[status]
+                if (status == 0){
+                  // 离职
+                  return h('div',[
+                    h('label',{
+                      style: {
+                        color: 'red',
+                        fontSize: '16px'
+                      }
+                    },stat)
+                  ]);
+                }else if(status == 1) {
+                  // 在职
+                  return h('div',[
+                    h('label',{
+                      style: {
+                        color: 'green',
+                        fontSize: '16px'
+                      }
+                    },stat)
+                  ]);
+                }else if(status == 2) {
+                  // 休假
+                  return h('div',[
+                    h('label',{
+                      style: {
+                        color: 'blue',
+                        fontSize: '16px'
+                      }
+                    },stat)
+                  ]);
+                }else {
+                  // 3 实习生
+                  return h('div',[
+                    h('label',{
+                      style: {
+                        color: '#86ff06',
+                        fontSize: '16px'
+                      }
+                    },stat)
+                  ]);
+                }
               }
             }
           ],
@@ -133,12 +186,20 @@
           PageSizeOpt: [10,20,40],    // 每页多少条数据
           CurrentPage: 1,   // 当前显示第几页
           PageSize: 10, // 当前一页显示的条数
+          count: 100,  // 表格总共多少条
           tableLoading: true,
           beginCol: null,  // 自定义导出几行几列 不在页面上验证大小 而是在导出前进行判断
           endCol: null,
           beginRow: null,
           endRow: null,
           isFinish: false // 是否输入好了 导出几行几列
+        }
+      },
+      watch: {  // 观察者 或是 对象替换 可以在 不需要刷新页面而替换表格里的内容 我不知道那个性能好 但watch方便一点
+        data: {
+          handler(newVal,oldVal){
+            this.data = newVal
+          }
         }
       },
       components: {
@@ -150,11 +211,14 @@
       methods:{
         // 初始化表格数据
         initList() {
-          console.log('in init')
-          fetchEmployeeList().then(res=>{
-            console.log('in fetch')
-            // console.log(res)
-            this.data = res.data
+          // console.log('in init')
+          fetchEmployeeList(0,10).then(res=>{
+            // console.log('in fetch')
+            // console.log(res) // 经过promise封装过的数据
+            let count = res.data.count
+            this.count = count
+            this.PageSizeOpt.push(count)
+            this.data = res.data.list
             this.tableLoading = false
           })
         },
@@ -184,13 +248,25 @@
         },
         // 分页的响应函数
         tableChangePage(page){
-          console.log('ok')
-          console.log(page)
+          // console.log('ok')
+          // console.log(page)
+          this.CurrentPage = page
+          fetchEmployeeList(page-1,this.PageSize).then(res=>{
+            console.log('in tableChangePage')
+            this.data = res.data.list
+            this.tableLoading = false
+          })
         },
         //  表格每页多少条的回调
         tableChangeSize(size){
-          console.log('ok')
-          console.log(size)
+          console.log('tableChangeSize')
+          // console.log(size)
+          this.PageSize = size
+          fetchEmployeeList(this.CurrentPage-1,size).then(res=>{
+            console.log('in tableChangePage')
+            this.data = res.data.list
+            this.tableLoading = false
+          })
         }
       }
     }
@@ -200,14 +276,13 @@
 .exportBtn {
   margin-top: 20px;
 }
-  .custom-col-label {
-    margin-left: 2px;
-    margin-right: 4px;
-    color: #53e3a6;
-  }
-  .custom-row-label {
-    margin-left: 2px;
-    margin-right: 4px;
+.table-page {
+  margin-top: 16px;
+  margin-bottom: 26px;
+}
+  .custom-label {
+    margin-left: 3px;
+    margin-right: 5px;
     color: #58d4e3;
   }
 </style>
