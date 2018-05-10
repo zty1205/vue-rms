@@ -16,6 +16,7 @@ const employeeSchema = new Schema({
   phone:  String,
   address: String,
   avatar: String, // 头像路径
+  img: String,
   gender: String, //性别
   age: Number,
   role: Number, // 职位  roleMap = { 3: '总监', 2: '经理', 1：'组员' }

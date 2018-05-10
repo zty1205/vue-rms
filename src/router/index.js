@@ -5,9 +5,11 @@ import ImageBanner from '@/components/image/ImageBanner';
 import NotePad from '@/components/tools/NotePad';
 import clock from '@/components/tools/clock';
 import employeeList from '@/components/employee/employeeList';
+import employeeAdd from '@/components/employee/employeeAdd';
 import login from '@/components/views/login';
 import home from '@/components/views/home';
 import index from '@/components/index/index';
+import myself from '@/components/mine/myself';
 // const login = resolve => require(['../components/views/login.vue'], resolve)
 
 Vue.use(Router)
@@ -49,12 +51,20 @@ export default new Router({
           component: employeeList
         },
         {
+          path: 'employee/add',
+          component: employeeAdd
+        },
+        {
           path: 'NotePad',
           component: NotePad
         },
         {
           path: 'clock',
           component: clock
+        },
+        {
+          path: 'myself',
+          component: myself
         }
       ]
     }

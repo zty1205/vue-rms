@@ -1,7 +1,7 @@
 // import axios from 'axios'
 import axios from '../utils/axiosService'
 export const fetchEmployeeList = (page,size) => {
-  console.log('fetchEmployeeList')
+  // console.log('fetchEmployeeList')
   // return axios.get(`/api/employeeList?start=${start}&num=${num}`)
   let url = '/employee/list'   // 已经有webpack代理了
   return new Promise((resolve, reject)=> {
@@ -32,7 +32,7 @@ export const findEmployee = (em) => {
   if(em.department && em.department != '0'){
     params.department =em.department
   }
-  console.log(params)
+  // console.log(params)
   let url = '/employee/find'   // 已经有webpack代理了
   return new Promise((resolve, reject)=> {
     axios.get(url,{

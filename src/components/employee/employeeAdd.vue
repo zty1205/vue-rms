@@ -1,71 +1,88 @@
 <template>
-  <transition>
-    <div class="maskFrom">
-      <div class="mask"></div>
-      <Form :model="employeeForm" :label-width="80" ref="employeeForm">
-        <!-- 姓名 非空 展示-->
-        <FormItem label="Name">
-          <Input v-model="employeeForm.name" placeholder="Enter your name..."></Input>
+    <Row>
+      <Col span="22" offset="1">
+        <Form :model="employeeForm" :label-width="110" label-position="left" ref="employeeForm" class="add-form">
+        <!-- 姓名-->
+        <FormItem>
+          <Row :gutter="16">
+            <Col span="11" style="border: 1px solid blue;">
+              <label class="add-form-label">名字</label>
+              <Input class="add-form-input" v-model="employeeForm.name" placeholder="Enter name..."/>
+            </Col>
+            <Col span="11" offset="2" style="border: 1px solid blue;">
+              <label class="add-form-label">初始密码</label>
+              <Input type="password" class="add-form-input" v-model="employeeForm.password" placeholder="Enter password..."/>
+            </Col>
+          </Row>
+
         </FormItem>
-        <!-- 密码 非空 -->
-        <FormItem label="Password">
-          <Input type="password" v-model="employeeForm.password" placeholder="Enter your password..."></Input>
+        <!-- 密码 -->
+        <FormItem label="初始密码">
+
         </FormItem>
-        <!-- 电话 非空 便于联系 展示-->
-        <FormItem label="Phone">
+        <!-- 电话-->
+        <FormItem label="电话">
           <Input v-model="employeeForm.phone" placeholder="Enter your phone..."></Input>
         </FormItem>
         <!-- 地址 -->
-        <FormItem label="Address">
+        <FormItem label="地址">
           <Input type="password" v-model="employeeForm.address" placeholder="Enter your address..."></Input>
         </FormItem>
-        <!-- 性别 排序 展示-->
-        <FormItem label="Gender">
-          <RadioGroup v-model="employeeForm.gender">
-            <Radio label="male">Male</Radio>
-            <Radio label="female">Female</Radio>
-          </RadioGroup>
-        </FormItem>
-        <!-- 年龄 展示 排序 -->
-        <FormItem label="Age">
-          <Slider v-model="employeeForm.age" :min="18" :max="130" show-input></Slider>
-        </FormItem>
-        <!-- 部门 展示 排序 -->
-        <FormItem label="Department">
-          <RadioGroup v-model="employeeForm.department">
-            <Radio label="directorate" disabled>Directorate</Radio>
-            <Radio label="development">Development</Radio>
-            <Radio label="business">Business</Radio>
-            <Radio label="human">Human</Radio>
-            <Radio label="logistics">Logistics</Radio>
-          </RadioGroup>
-        </FormItem>
-
-        <!--图片和头像 先不考虑-->
-
-        <!-- 入职时间 默认now 展示 排序-->
-        <FormItem label="Registration_Date">
+          <!-- 入职时间 默认now-->
+        <FormItem label="入职时间">
           <Row>
             <Col span="11">
-            <DatePicker type="date" placeholder="Select date" v-model="employeeForm.date"></DatePicker>
+              <DatePicker type="date" placeholder="Select date" v-model="employeeForm.date"></DatePicker>
             </Col>
             <Col span="2" style="text-align: center">-</Col>
             <Col span="11">
-            <TimePicker type="time" placeholder="Select time" v-model="employeeForm.time"></TimePicker>
+              <TimePicker type="time" placeholder="Select time" v-model="employeeForm.time"></TimePicker>
             </Col>
           </Row>
         </FormItem>
+        <!-- 部门  -->
+        <FormItem label="部门">
+          <Select v-model="employeeForm.department">
+            <Option value="1">研发部</Option>
+            <Option value="2" >业务部</Option>
+            <Option value="3" >后勤部</Option>
+            <Option value="4" >人事部</Option>
+          </Select>
+
+        </FormItem>
+          <!-- 职位 -->
+        <FormItem label="职位">
+          <RadioGroup v-model="employeeForm.department">
+            <Radio label="1">组员</Radio>
+            <Radio label="2">经理</Radio>
+            <Radio label="3" :disabled="authorization <= 3">总监</Radio>
+          </RadioGroup>
+        </FormItem>
+        <!-- 性别 -->
+        <FormItem label="性别">
+          <RadioGroup v-model="employeeForm.gender">
+            <Radio label="男">男</Radio>
+            <Radio label="女">女</Radio>
+          </RadioGroup>
+        </FormItem>
+        <!-- 年龄  -->
+        <FormItem label="Age">
+          <Slider v-model="employeeForm.age" :min="18" :max="130" show-input></Slider>
+        </FormItem>
+
+
+        <!--图片和头像 先不考虑-->
+
+
+
 
         <FormItem>
           <Button type="primary" @click="handleSubmit('employeeForm')">Submit</Button>
           <Button type="ghost" @click="handleSubmit('employeeForm')" style="margin-left: 8px">Cancel</Button>
         </FormItem>
       </Form>
-    </div>
-
-
-  </transition>
-
+      </Col>
+    </Row>
 </template>
 
 <script>
@@ -81,7 +98,14 @@
             age: null,
             date: null,
             time: null,
+            department: null,
+            role: ''
           }
+        }
+      },
+      computed: {
+        authorization(){
+          return this.$store.getters.authorization
         }
       },
       methods: {
@@ -96,26 +120,21 @@
 </script>
 
 <style scoped>
-  .maskFrom{
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 800px;
-    margin: 10px auto;
-    z-index: 1000;
+.add-form {
+  width: 100%;
+}
+  .add-form-input {
+    width: 70%;
     border: 1px solid red;
   }
-  .mask{
-     position: fixed;
-     top: 0;
-     left: 0;
-     right: 0;
-     bottom: 0;
-     background-color: rgba(55,55,55,.6);
-     height: 100%;
-     opacity: .5;
-     z-index: 0;
-   }
+  .add-form-label {
+    text-align: left;
+    vertical-align: middle;
+    float: left;
+    font-size: 12px;
+    color: #495060;
+    line-height: 1;
+    padding: 10px 12px 10px 0;
+    box-sizing: border-box;
+  }
 </style>

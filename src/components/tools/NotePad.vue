@@ -27,7 +27,7 @@
           {
             title: 'Action',
             key: 'action',
-            width: 140,
+            width: 200,
             align: 'center',
             render: (h, params) => {
               return h('div', [
