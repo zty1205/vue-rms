@@ -19,6 +19,32 @@ export const fetchEmployeeList = (page,size) => {
   })
 }
 
+// 查询
+export const findEmployee = (em) => {
+
+  let params = {}
+  if(em.eid){
+    params.eid =em.eid
+  }
+  if(em.name){
+    params.name =em.name
+  }
+  if(em.department && em.department != '0'){
+    params.department =em.department
+  }
+  console.log(params)
+  let url = '/employee/find'   // 已经有webpack代理了
+  return new Promise((resolve, reject)=> {
+    axios.get(url,{
+      params
+    }).then((res)=>{
+      resolve(res)
+    }).catch((err)=>{
+      reject(err)
+    })
+  })
+}
+
 export const addEmployee = (data) => {
   console.log('addEmployee')
   // return axios.get(`/api/employeeList?start=${start}&num=${num}`)

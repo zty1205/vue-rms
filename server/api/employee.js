@@ -18,6 +18,7 @@ router.get('/list', (req, res, next) => {   // 路由为 4000/employee/list
   let size = parseInt(sizeString)
   // let count = 0
   // 这样子稍微好一点 但每次分页仍需查一次总数 应不应该单独拿出来 只允许刚开始的一次
+  // 删除后 进行获取 应该保留下来
   employee.count({},(err,count)=>{
     employee.find({}).limit(size).skip(page * size).then(employee => {
       // console.log(employee)
@@ -50,7 +51,7 @@ router.get('/list', (req, res, next) => {   // 路由为 4000/employee/list
 
 // 根据id删除   router.get 或post 不能写其他的
   // findById 查询的是ObjectID
-// url 4000/employee/delete/eid
+// url 4000/employee/delete/123
 router.get('/delete/:eid',(req,res,next) => {
   const eid = req.params.eid;
   employee.findOneAndRemove({eid: eid}).then((employee) =>{
@@ -58,10 +59,16 @@ router.get('/delete/:eid',(req,res,next) => {
     // 找不到的话 前端304 后台null
     if(!employee){
       // 有返回前端就是200
-      res.send('该用户不存在！')
+      res.json({
+        isDelete: false,
+        msg: '该员工不存在！'
+      })
     }else{
       // console.log(employee)
-      res.send(employee)
+      res.json({
+        isDelete: true,
+        msg: '员工奔现了远方！'
+      })
     }
   }).catch(next)
 })
@@ -85,6 +92,38 @@ router.post('/add',(req,res,next) => {
       console.log(doc)  // doc  返回的是存储后的信息
       res.send(doc)
     return next   // 添加后才不会报错
+  })
+})
+
+// url 4000/employee/find?eid=1001&name=zty&department=1
+router.get('/find',(req,res,next) => {
+  const eid = req.query.eid;
+  const name = req.query.name;
+  const department = req.query.department
+  let em = {}
+  if(eid){
+    em.eid = eid
+  }
+  if(name){
+    em.name = name
+  }
+  if(department){
+    em.department = department
+  }
+  console.log(em)  // 返回的长度 由前端判断好了
+  employee.find(em).then(employee =>{
+    console.log(employee)
+    if (!employee || employee.length ==0){
+      res.json({
+        isExist: false,
+        list: null
+      })
+    }else{
+      res.json({
+        isExist:true,
+        list: employee
+      })
+    }
   })
 })
 

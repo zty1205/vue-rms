@@ -1,6 +1,28 @@
 <template>
     <div>
-        <h2 style="margin-bottom: 10px;margin-top: 6px">员工信息列表</h2>
+      <Form ref="findEmployee" :model="findEmployee" inline>
+        <label class="find-label">Id:</label>
+        <FormItem prop="eid"> <!-- 卸载属性里的label 和按钮不在一列 -->
+          <Input type="text" v-model="findEmployee.eid"/>
+        </FormItem>
+        <label class="find-label">姓名:</label>
+        <FormItem prop="name">
+          <Input type="text" v-model="findEmployee.name"/>
+        </FormItem>
+        <label class="find-label">部门:</label>
+        <FormItem prop="department">
+          <Select v-model="findEmployee.department">
+            <Option value="0"> 所  有 </Option>
+            <Option value="1"> 研发部 </Option>
+            <Option value="2"> 业务部 </Option>
+            <Option value="3"> 后勤部 </Option>
+            <Option value="4"> 人事部 </Option>
+          </Select>
+        </FormItem>
+        <FormItem>
+          <Button type="ghost" shape="circle" size="small" icon="ios-search" @click="handleSearch">Search</Button>
+        </FormItem>
+      </Form>
       <Table ref="table" size="large" height="460" :loading="tableLoading" :columns="columns" :data="data"></Table>
 
       <Page :total="count" :page-size-opts="PageSizeOpt" placement="top"
@@ -32,7 +54,7 @@
 
 <script>
   import employeeAdd from './employeeAdd.vue'
-  import {fetchEmployeeList} from '../../api/employee'
+  import {fetchEmployeeList , findEmployee} from '../../api/employee'
 
   const departmentMap = {
     1: '研发部',
@@ -57,6 +79,11 @@
     export default {
       data(){
         return {
+          findEmployee :{
+            eid: '',
+            name: '',
+            department: null,
+          },
           columns: [
             {
               title: 'Id',
@@ -82,6 +109,10 @@
               sortable: true
             },
             {
+              title: '地址',
+              key: 'address',
+            },
+            {
               title: '职位',
               key: 'role',
               render:(h, params) => {
@@ -89,6 +120,30 @@
                 // let role = this.data[_index].role
                 let role = params.row.role
                 return h('div',[h('label',roleMap[role])]);
+              },
+              filters: [  // 过滤什么的都是在当前页 对data里存在的数据进行操作
+                {
+                  label: '总监',
+                  value: 3
+                },
+                {
+                  label: '经理',
+                  value: 2
+                },
+                {
+                  label: '组员',
+                  value: 1
+                }
+              ],
+              filterMultiple: false,
+              filterMethod (value, row) {
+                if (value === 1) {
+                  return row.role == 1;
+                } else if (value === 2) {
+                  return row.role == 2;
+                } else{
+                  return row.role == 3;
+                }
               }
             },
             {
@@ -180,6 +235,41 @@
                   ]);
                 }
               }
+            },
+            {
+              title: 'Action',
+              key: 'action',
+              width: 200,
+              align: 'center',
+              render: (h, params) => {
+                return h('div', [
+                  h('Button', {
+                    props: {
+                      type: 'primary',
+                      size: 'small'
+                    },
+                    style: {
+                      marginRight: '10px'
+                    },
+                    on: {
+                      click: () => {
+                        this.detail(params.row)
+                      }
+                    }
+                  }, '详情'),
+                  h('Button', {
+                    props: {
+                      type: 'error',
+                      size: 'small'
+                    },
+                    on: {
+                      click: () => {
+                        this.resign(params.index)
+                      }
+                    }
+                  }, '离职')
+                ]);
+              }
             }
           ],
           data: [],
@@ -220,6 +310,22 @@
             this.PageSizeOpt.push(count)
             this.data = res.data.list
             this.tableLoading = false
+          })
+        },
+        //条件查询员工
+        handleSearch(){
+          console.log(this.findEmployee)
+          let em = this.findEmployee
+          findEmployee(em).then(res =>{
+            // console.log(res)
+            let Redata = res.data
+            if(Redata.isExist){
+              this.count = Redata.list.length
+              this.data = Redata.list
+            }else {
+              this.count = 0
+              this.data = []
+            }
           })
         },
         // 导出Excel
@@ -267,6 +373,15 @@
             this.data = res.data.list
             this.tableLoading = false
           })
+        },
+        //详细信息
+        detail(row){
+          console.log(row)
+        },
+        // 离职
+        resign(index){
+          console.log(index)
+          this.data.splice(index, 1);  // 只是删除表格里的数据 数据库里并没有删除
         }
       }
     }
@@ -277,12 +392,20 @@
   margin-top: 20px;
 }
 .table-page {
-  margin-top: 16px;
-  margin-bottom: 26px;
+  margin-top: 10px;
+  margin-bottom: 20px;
 }
   .custom-label {
     margin-left: 3px;
     margin-right: 5px;
     color: #58d4e3;
+  }
+  .find-label {
+    display: inline-block;
+    height: 32px;
+    line-height: 1.5;
+    padding: 4px 7px;
+    font-size: 12px;
+    color: #495060;
   }
 </style>
