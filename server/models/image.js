@@ -13,5 +13,5 @@ const ImgaeSchema = new Schema({
   description: String
 })
 
-const Image = mongoose.model('Image', ImgaeSchema)
+const Image = mongoose.model('image', ImgaeSchema)
 module.exports = Image

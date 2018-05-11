@@ -4,19 +4,14 @@
             <span style="text-align:center;">zty管理系统</span>
         </Col>
         <Col span="12">
-          <a class="loginOut" @click="LoginOut">退出</a>
-          <span class="welcome">欢迎  {{ nowUser }} </span>
-          <DatePicker :open="open" type="date" :value="value" class="head_calendar">
-            <Icon :style="{cursor: 'pointer'}" class="calendarIcon" type="calendar" size=30 @click.native="handleClick"></Icon>
-          </DatePicker>
-
-            <Dropdown trigger="custom" :visible="visible" >
+          <span class="welcome">欢迎 , {{ name }} </span>
+          <Dropdown trigger="custom" :visible="visible" >
                 <a href="javascript:void(0)" @click="handleOpen">
                     <Badge count="4">
                             <Icon type="chatboxes" :size=30 color="white"></Icon>
                     </Badge>
                 </a>
-                <DropdownMenu slot="list">
+                <DropdownMenu slot="list">  <!--为以后升级websocket准备-->
                     <DropdownItem>张腾跃发过来的消息：你好啊</DropdownItem>
                     <DropdownItem>炸酱面</DropdownItem>
                     <DropdownItem disabled>豆汁儿</DropdownItem>
@@ -27,8 +22,12 @@
                     </div>
                 </DropdownMenu>
             </Dropdown>
+          <Avatar :src="ava_url"></Avatar>
+          <a class="loginOut" @click="LoginOut">
+            退出
+            <Icon type="log-out" size="16"></Icon>
+          </a>
 
-            <Avatar :src="ava_url"></Avatar>
         </Col>
     </Row>
 </template>
@@ -39,8 +38,7 @@ export default {
             return {
                 visible: false,
                 open: false,
-                value: new Date(),
-                nowUser: "admin"
+                value: new Date()
             }
         },
         computed: {
@@ -49,6 +47,9 @@ export default {
             // let src = 'https://pacdn.500px.org/527106/49546659c55dad2d216b9bf8de1d9cd410f34cd3/2.jpg?2'
             console.log(src)
             return src
+          },
+          name(){
+            return this.$store.getters.name
           }
         },
         methods: {
@@ -69,21 +70,12 @@ export default {
 </script>
 
 <style scoped>
-  .head_calendar{
-    float: right;
-    margin: 16px 6px;
-  }
-  .calendarIcon{
-    margin-right: 10px;
-  }
   .loginOut{
-    float: right;
-    font-size: 14px;
-    margin: 3px 8px;
+    font-size: 16px;
+    margin: 3px 14px;
   }
   .welcome{
     font-size: 16px;
-    float: right;
     font-weight: bold;
     color: burlywood;
     margin: 2px 8px;

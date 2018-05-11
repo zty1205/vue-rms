@@ -32,19 +32,25 @@
                   </router-link>
                 </MenuItem>
             </MenuGroup>
-            <MenuGroup title="考勤与工薪">
-                <MenuItem name="3-4"> 员工考勤 </MenuItem>
-                <MenuItem name="3-5"> 员工工薪 </MenuItem>
+            <MenuGroup title="部门">
+                <MenuItem name="3-4">
+                  <router-link to="/home/department/list" class="link-item">
+                    部门信息
+                  </router-link>
+                </MenuItem>
             </MenuGroup>
         </Submenu>
 
         <Submenu name="4">
             <template slot="title">
               <Icon type="ios-barcode"></Icon>
-                考勤相关
+                行政审批
             </template>
-            <MenuItem name="4-1"> 考勤审请 </MenuItem>
-            <MenuItem name="4-2"> 考勤审批 </MenuItem>
+            <MenuItem name="4-1">
+              <router-link to="/home/applicant" class="link-item">
+                请假管理
+              </router-link>
+            </MenuItem>
         </Submenu>
 
         <Submenu name="5">
@@ -61,7 +67,7 @@
           <MenuItem name="5-2">
             <router-link to="/home/clock" class="link-item">
               <Icon type="clock"></Icon>
-              <span class="font-item">钟  表</span>
+              <span class="font-item">钟&nbsp;表</span>
             </router-link>
           </MenuItem>
         </Submenu>
@@ -76,8 +82,11 @@
             个人信息
           </router-link>
         </MenuItem>
-        <MenuItem name="6-2"> 考勤信息 </MenuItem>
-        <MenuItem name="6-2"> 工资信息 </MenuItem>
+        <MenuItem name="6-2">
+          <router-link to="/home/AttendSalary" class="link-item">
+            考勤/工资
+          </router-link>
+        </MenuItem>
       </Submenu>
 
     </Menu>

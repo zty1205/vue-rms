@@ -6,6 +6,9 @@ const bodyParser = require('body-parser')
 const userRoutes = require('./api/user')
 const imageRoutes = require('./api/image')
 const employeeRoutes = require('./api/employee')
+const departmentRoutes = require('./api/department')
+const applicantRoutes = require('./api/applicant')
+const wageRoutes = require('./api/wage')
 
 // 在单页应用中，处理当刷新页面或直接在地址栏访问非根页面的时候，
 // 返回404的bug。匹配非文件（路径中不带.）的get请求。Cli中已经有 无需安装
@@ -43,8 +46,12 @@ const app = express()
 // 请求 4000/user/* 的请求 都会匹配到
 app.use(bodyParser.json())
 // app.use('/api', userRoutes)
+app.use('/images', imageRoutes)
 app.use('/user', userRoutes)
 app.use('/employee', employeeRoutes)
+app.use('/department', departmentRoutes)
+app.use('/applicant', applicantRoutes)
+app.use('/wage', wageRoutes)
 
 app.use(history())
 

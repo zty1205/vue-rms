@@ -6,10 +6,13 @@ import NotePad from '@/components/tools/NotePad';
 import clock from '@/components/tools/clock';
 import employeeList from '@/components/employee/employeeList';
 import employeeAdd from '@/components/employee/employeeAdd';
+import departmentList from '@/components/department/departmentList';
+import applicant from '@/components/applicant/applicant';
 import login from '@/components/views/login';
 import home from '@/components/views/home';
 import index from '@/components/index/index';
 import myself from '@/components/mine/myself';
+import AttendSalary from '@/components/mine/AttendSalary';
 // const login = resolve => require(['../components/views/login.vue'], resolve)
 
 Vue.use(Router)
@@ -55,6 +58,14 @@ export default new Router({
           component: employeeAdd
         },
         {
+          path: 'department/list',
+          component: departmentList
+        },
+        {
+          path: 'applicant',
+          component: applicant
+        },
+        {
           path: 'NotePad',
           component: NotePad
         },
@@ -65,6 +76,10 @@ export default new Router({
         {
           path: 'myself',
           component: myself
+        },
+        {
+          path: 'AttendSalary',
+          component: AttendSalary
         }
       ]
     }

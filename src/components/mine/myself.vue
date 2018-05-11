@@ -124,7 +124,7 @@
     width: 60%;
     height: 400px;
     border: 2px solid #d8ffe1;
-    box-shadow: 0 0 2px 2px #95e3c9;
+    box-shadow: 0 0 2px 2px #b4dfe3;
     border-radius: 4px;
   }
   .personal {
@@ -132,6 +132,6 @@
     display: block;
     margin-top: 24px;
     margin-bottom: 16px;
-    color: #a72ce3;
+    color: #6ef0ff;
   }
 </style>

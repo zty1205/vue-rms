@@ -6,7 +6,7 @@
         </div>
       </Row>
 
-      <h1 class="news-title">夕阳动态</h1>
+      <h1 class="news-title">公式动态</h1>
       <hr class="img-hr-content"/>
 
       <Row>
