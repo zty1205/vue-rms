@@ -54,7 +54,7 @@
 
 <script>
   import employeeAdd from './employeeAdd.vue'
-  import {fetchEmployeeList , findEmployee} from '../../api/employee'
+  import {fetchEmployeeList , findEmployee , changeEmployeeStatus} from '../../api/employee'
 
   const departmentMap = {
     1: '研发部',
@@ -242,33 +242,78 @@
               width: 200,
               align: 'center',
               render: (h, params) => {
-                return h('div', [
-                  h('Button', {
-                    props: {
-                      type: 'primary',
-                      size: 'small'
-                    },
-                    style: {
-                      marginRight: '10px'
-                    },
-                    on: {
-                      click: () => {
-                        this.detail(params.row)
+                let status = params.row.status
+                if(status != 3) {
+                  return h('div', [
+                    h('Button', {
+                      props: {
+                        type: 'primary',
+                        size: 'small'
+                      },
+                      style: {
+                        marginRight: '10px'
+                      },
+                      on: {
+                        click: () => {
+                          this.detail(params.row)
+                        }
                       }
-                    }
-                  }, '详情'),
-                  h('Button', {
-                    props: {
-                      type: 'error',
-                      size: 'small'
-                    },
-                    on: {
-                      click: () => {
-                        this.resign(params.index)
+                    }, '详情'),
+                    h('Button', {
+                      props: {
+                        type: 'error',
+                        size: 'small'
+                      },
+                      on: {
+                        click: () => {
+                          this.resign(params.index)
+                        }
                       }
-                    }
-                  }, '离职')
-                ]);
+                    }, '离职')
+                  ]);
+                }else { // 实习生还需要添加转正按钮
+                  return h('div', [
+                    h('Button', {
+                      props: {
+                        type: 'primary',
+                        size: 'small'
+                      },
+                      style: {
+                        marginRight: '10px'
+                      },
+                      on: {
+                        click: () => {
+                          this.detail(params.row)
+                        }
+                      }
+                    }, '详情'),
+                    h('Button', {
+                      props: {
+                        type: 'success',
+                        size: 'small'
+                      },
+                      style: {
+                        marginRight: '10px'
+                      },
+                      on: {
+                        click: () => {
+                          this.becomeMember(params.row)
+                        }
+                      }
+                    }, '转正'),
+                    h('Button', {
+                      props: {
+                        type: 'error',
+                        size: 'small'
+                      },
+                      on: {
+                        click: () => {
+                          this.resign(params.index)
+                        }
+                      }
+                    }, '离职')
+                  ]);
+                }
               }
             }
           ],
@@ -382,6 +427,35 @@
         resign(index){
           console.log(index)
           this.data.splice(index, 1);  // 只是删除表格里的数据 数据库里并没有删除
+        },
+        // 转正
+        becomeMember(row){
+          changeEmployeeStatus(row.eid,1).then(res => {
+            console.log(res)
+            // 对象替换 或 更新列表  但返回的是新的对象 所有要使用对象替换
+            // 替换太麻烦 根据返回的布尔值 判断就行
+            if(res.data.list){
+              row.status = 1
+              console.log("转正成功")
+              this.$Notice.success({
+                title: '实习生转正',
+                render: h => {
+                  return h('span', [
+                    '恭喜你， ',
+                    h('a',{
+                      style: {
+                        fontSize: '16px'
+                      }
+                    } , row.name),
+                    h('p','欢迎您成为公司大家庭的一员的')
+                  ])
+                },
+                duration: 3
+              });
+            }
+            // let newData = Object.assign(this.data, res.)
+          })
+          console.log(row)
         }
       }
     }

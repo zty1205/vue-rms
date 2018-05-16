@@ -56,7 +56,7 @@
         <Submenu name="5">
           <template slot="title">
             <Icon type="briefcase"></Icon>
-            其他工具
+            系统工具
           </template>
           <MenuItem name="5-1">
             <router-link to="/home/NotePad" class="link-item">
@@ -75,7 +75,7 @@
       <Submenu name="6">
         <template slot="title">
           <Icon type="android-person"></Icon>
-          我&emsp;&emsp;的
+          用户中心
         </template>
         <MenuItem name="6-1">
           <router-link to="/home/myself" class="link-item">

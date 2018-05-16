@@ -62,3 +62,27 @@ export const addEmployee = (data) => {
     })
   })
 }
+
+// 更新员工状态
+export const changeEmployeeStatus = (eid,status) => {
+  console.log('addEmployee')
+  // return axios.get(`/api/employeeList?start=${start}&num=${num}`)
+  // let url = '/employee/add'  不行 代理失败了
+  // let url = 'http://localhost:4000/employee/add'
+  let url = '/employee/changeStatus'
+  return new Promise((resolve, reject)=> {
+    axios.post(url,{
+      // params: {
+        eid: eid,
+        status: status
+      // }
+    }).then((res)=>{
+      console.log('in axios get')
+      resolve(res)
+    }).catch((err)=>{
+      console.log(err)
+      resolve(err)
+      // reject(err)
+    })
+  })
+}

@@ -1,12 +1,29 @@
 <template>
     <div class="Layout">
       <Row>
-        <div class="img-container">
-          <p class="img-innerDes">Apollo 如期而至</p>
-        </div>
+        <Carousel  v-model="value2" loop :autoplay-speed="speed"> <!-- autoplay -->
+          <CarouselItem>
+            <div class="demo-carouse1">
+              <div class="img-container1"></div>
+            </div>
+          </CarouselItem>
+          <CarouselItem>
+            <div class="demo-carouse1">
+              <div class="img-container2"></div>
+            </div>
+          </CarouselItem>
+          <CarouselItem>
+            <div class="demo-carouse1">
+              <div class="img-container3"></div>
+            </div>
+          </CarouselItem>
+        </Carousel>
+        <!--<div class="img-container">-->
+          <!--<p class="img-innerDes">Apollo 如期而至</p>-->
+        <!--</div>-->
       </Row>
 
-      <h1 class="news-title">公式动态</h1>
+      <h1 class="news-title">公司动态</h1>
       <hr class="img-hr-content"/>
 
       <Row>
@@ -76,6 +93,12 @@
 <script>
 // 首页 介绍公司
 export default {
+  data() {
+    return {
+      value2: 1,
+      speed: 3000
+    }
+  }
 }
 </script>
 
@@ -119,8 +142,24 @@ export default {
     margin-bottom: 4px;
     margin-left: 30px;
   }
-  .img-container {
+  .img-container1 {
     background-image: url('../../assets/img/apollo.png');
+    background-repeat: round;
+    background-size: contain;
+    width: 98%;
+    height: 300px;
+    margin: 1px auto;
+  }
+  .img-container2 {
+    background-image: url('../../assets/img/index.jpg');
+    background-repeat: round;
+    background-size: contain;
+    width: 98%;
+    height: 300px;
+    margin: 1px auto;
+  }
+  .img-container3 {
+    background-image: url('../../assets/img/wein.jpg');
     background-repeat: round;
     background-size: contain;
     width: 98%;
