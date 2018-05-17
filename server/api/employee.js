@@ -127,4 +127,26 @@ router.get('/find',(req,res,next) => {
   })
 })
 
+// url http://localhost:4000/employee/changeStatus?eid=YF000001&status=2
+router.post('/changeStatus',(req,res,next) => {
+  const eid = req.body.eid;
+  const status = req.body.status;
+// 第一参数是查询条件 第二个函数是更新的数据 第三个是配置 如果new不为true则返回更新前的数据
+  // 获取的数据 前端可使用对象替换
+  employee.findOneAndUpdate({eid: eid},{status: status},{new: true}).then(employee =>{
+    // console.log(employee)
+    if (!employee || employee.length ==0){
+      res.json({
+        isExist: false,
+        list: null
+      })
+    }else{
+      res.json({
+        isExist:true,
+        list: employee
+      })
+    }
+  })
+})
+
 module.exports = router
