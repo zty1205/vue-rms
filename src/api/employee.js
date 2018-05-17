@@ -1,5 +1,7 @@
 // import axios from 'axios'
 import axios from '../utils/axiosService'
+
+// 分页获取员工数据
 export const fetchEmployeeList = (page,size) => {
   // console.log('fetchEmployeeList')
   // return axios.get(`/api/employeeList?start=${start}&num=${num}`)
@@ -11,7 +13,7 @@ export const fetchEmployeeList = (page,size) => {
         size: size
       }
     }).then((res)=>{
-      console.log('in axios get')
+      // console.log('in axios get')
       resolve(res)
     }).catch((err)=>{
       reject(err)
@@ -19,9 +21,8 @@ export const fetchEmployeeList = (page,size) => {
   })
 }
 
-// 查询
+// 条件查询
 export const findEmployee = (em) => {
-
   let params = {}
   if(em.eid){
     params.eid =em.eid
@@ -45,15 +46,16 @@ export const findEmployee = (em) => {
   })
 }
 
+// 添加员工
 export const addEmployee = (data) => {
-  console.log('addEmployee')
+  // console.log('addEmployee')
   // return axios.get(`/api/employeeList?start=${start}&num=${num}`)
   // let url = '/employee/add'  不行 代理失败了
   // let url = 'http://localhost:4000/employee/add'
   let url = '/employee/add'
   return new Promise((resolve, reject)=> {
     axios.post(url,data).then((res)=>{
-      console.log('in axios get')
+      // console.log('in axios get')
       resolve(res)
     }).catch((err)=>{
       console.log(err)
@@ -65,7 +67,7 @@ export const addEmployee = (data) => {
 
 // 更新员工状态
 export const changeEmployeeStatus = (eid,status) => {
-  console.log('addEmployee')
+  // console.log('addEmployee')
   // return axios.get(`/api/employeeList?start=${start}&num=${num}`)
   // let url = '/employee/add'  不行 代理失败了
   // let url = 'http://localhost:4000/employee/add'
@@ -77,12 +79,27 @@ export const changeEmployeeStatus = (eid,status) => {
         status: status
       // }
     }).then((res)=>{
-      console.log('in axios get')
+      // console.log('in axios get')
       resolve(res)
     }).catch((err)=>{
       console.log(err)
-      resolve(err)
-      // reject(err)
+      // resolve(err)
+      reject(err)
+    })
+  })
+}
+
+// 删除已离职员工
+export const deleteEmployee = (eid) => {
+  console.log('delete employee')
+  let url = '/employee/delete/' + eid;
+  console.log(url)
+  return new Promise((resolve, reject)=> {
+    axios.get(url).then(res => {
+      resolve(res)
+    }).catch((err)=>{
+      console.log(err)
+      reject(err)
     })
   })
 }

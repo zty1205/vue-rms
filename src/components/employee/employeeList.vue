@@ -54,7 +54,7 @@
 
 <script>
   import employeeAdd from './employeeAdd.vue'
-  import {fetchEmployeeList , findEmployee , changeEmployeeStatus} from '../../api/employee'
+  import {fetchEmployeeList , findEmployee , changeEmployeeStatus , deleteEmployee} from '../../api/employee'
 
   const departmentMap = {
     1: '研发部',
@@ -64,7 +64,7 @@
   }
 
   const statusMap = {
-    0: '离职',
+    0: '已离职',
     1: '在职',
     2: '休假',
     3: '实习生'
@@ -243,35 +243,22 @@
               align: 'center',
               render: (h, params) => {
                 let status = params.row.status
-                if(status != 3) {
-                  return h('div', [
-                    h('Button', {
-                      props: {
-                        type: 'primary',
-                        size: 'small'
-                      },
-                      style: {
-                        marginRight: '10px'
-                      },
-                      on: {
-                        click: () => {
-                          this.detail(params.row)
-                        }
+                if(status == 0){
+                  // 员工已离职 添加删除员工按钮
+                  return h('Button',{
+                    props: {
+                      type: 'error',
+                      size: 'small'
+                    },
+                    on: {
+                      click: () => {
+                        this.delete(params.index)
                       }
-                    }, '详情'),
-                    h('Button', {
-                      props: {
-                        type: 'error',
-                        size: 'small'
-                      },
-                      on: {
-                        click: () => {
-                          this.resign(params.index)
-                        }
-                      }
-                    }, '离职')
-                  ]);
-                }else { // 实习生还需要添加转正按钮
+                    }
+                  },'删除')
+                }
+                else if(status == 3) {
+                  // 实习生还需要添加转正按钮
                   return h('div', [
                     h('Button', {
                       props: {
@@ -301,6 +288,34 @@
                         }
                       }
                     }, '转正'),
+                    h('Button', {
+                      props: {
+                        type: 'error',
+                        size: 'small'
+                      },
+                      on: {
+                        click: () => {
+                          this.resign(params.row)
+                        }
+                      }
+                    }, '离职')  // 离职也改状态 添加一个删除已离职员工的按钮
+                  ]);
+                }else {
+                  return h('div', [
+                    h('Button', {
+                      props: {
+                        type: 'primary',
+                        size: 'small'
+                      },
+                      style: {
+                        marginRight: '10px'
+                      },
+                      on: {
+                        click: () => {
+                          this.detail(params.row)
+                        }
+                      }
+                    }, '详情'),
                     h('Button', {
                       props: {
                         type: 'error',
@@ -424,9 +439,53 @@
           console.log(row)
         },
         // 离职
-        resign(index){
+        resign(row){
+          changeEmployeeStatus(row.eid,0).then(res => {
+            console.log(res)
+            // 对象替换 或 更新列表  但返回的是新的对象 所有要使用对象替换
+            // 替换太麻烦 根据返回的布尔值 判断就行
+            if(res.data.list){
+              row.status = 0
+              console.log("离职成功")
+              this.$Notice.success({
+                title: '员工离职',
+                render: h => {
+                  return h('span', [
+                    '员工 -  ',
+                    h('a',{
+                      style: {
+                        fontSize: '18px'
+                      }
+                    } , row.name),
+                    h('p','已飞往更广阔的未来')
+                  ])
+                },
+                duration: 3
+              });
+            }else {
+              this.$Message.error('系统内部错误，请联系系统维护人员');
+            }
+          })
+        },
+        // 删除离职员工
+        delete(index){
           console.log(index)
-          this.data.splice(index, 1);  // 只是删除表格里的数据 数据库里并没有删除
+          let eid = this.data[index].eid
+          console.log(eid)
+          deleteEmployee(eid).then(res => {
+            // console.log(res)
+            let data = res.data
+            if(data.isDelete){
+              // 删除成功
+              this.$Notice.success({
+                title: '删除成功'
+              })
+              this.data.splice(index, 1);  // 这行代码只是删除表格里的数据
+            }else {
+              // 删除失败
+              this.$Message.error('系统内部错误，请联系系统维护人员');
+            }
+          })
         },
         // 转正
         becomeMember(row){
@@ -444,7 +503,7 @@
                     '恭喜你， ',
                     h('a',{
                       style: {
-                        fontSize: '16px'
+                        fontSize: '18px'
                       }
                     } , row.name),
                     h('p','欢迎您成为公司大家庭的一员的')
@@ -452,10 +511,10 @@
                 },
                 duration: 3
               });
+            }else {
+              this.$Message.error('系统内部错误，请联系系统维护人员');
             }
-            // let newData = Object.assign(this.data, res.)
           })
-          console.log(row)
         }
       }
     }
