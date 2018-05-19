@@ -5,6 +5,11 @@
           <div class="table-top">
             <span class="table-title" >我发起的</span>
             <Icon type="paper-airplane" size="24"></Icon>
+
+            <Button type="dashed" class="applicant-btn" @click="applicant">
+              <Icon type="ios-redo-outline" size="22"></Icon>
+              申请
+            </Button>
           </div>
 
           <Table :load="loading" border :columns="applyColumns" :data="applyData"></Table>
@@ -268,6 +273,11 @@
             content: "<p>" + reason + "</p>"
           })
         },
+        // 发起申请
+        applicant() {
+          let aid = this.aid
+          console.log(aid)
+        },
         // 撤销申请
         remove (index) {
           this.applyData.splice(index, 1);
@@ -292,5 +302,8 @@
     font-size: 24px;
     font-weight: 400;
     margin-right: 10px;
+  }
+  .applicant-btn {
+    float: right;
   }
 </style>

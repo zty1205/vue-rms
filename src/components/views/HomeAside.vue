@@ -66,7 +66,7 @@
           </MenuItem>
           <MenuItem name="5-2">
             <router-link to="/home/clock" class="link-item">
-              <Icon type="clock"></Icon>
+              <Icon type="clock" class="icon-item"></Icon>
               <span class="font-item">数字时钟</span>
             </router-link>
           </MenuItem>

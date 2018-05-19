@@ -436,7 +436,43 @@
         },
         //详细信息
         detail(row){
-          console.log(row)
+          // iview 的模态框要使用render渲染 写的有点多 所以员工信息只写表格中没有的部分
+          this.$Modal.info({
+            title: row.name + '的其他信息',
+            render: h => {
+              return h('Layout',{ style: {marginTop: "30px" } },[
+                // 姓名
+                h('div',{ style: { margin: "5px 10px" } },[
+                  h('label',{ style: { lineHeight: "100%", color: "#19be69" } }, "姓名"),
+                  h('Input',{
+                    props: { type: "text", readonly: true, value: row.name },
+                    style: { width: "80%", marginLeft: "10px" } })
+                ]),
+                // 电话
+                h('div',{ style: { margin: "5px 10px" } },[
+                  h('label',{ style: { lineHeight: "100%" , color: "#19be69" } }, "电话"),
+                  h('Input',{
+                    props: { type: "text", readonly: true, value: row.phone },
+                    style: { width: "80%", marginLeft: "10px" } })
+                ]),
+                // 地址
+                h('div',{ style: { margin: "5px 10px" } },[
+                  h('label',{ style: { lineHeight: "100%", color: "#19be69" } }, "住址"),
+                  h('Input',{
+                    props: { type: "text", readonly: true, value: row.phone },
+                    style: { width: "80%", marginLeft: "10px" } })
+                ]),
+                // 地址
+                h('div',{ style: { margin: "5px 10px" } },[
+                  h('label',{ style: { lineHeight: "100%", color: "#19be69" } }, "入职"),
+                  h('Input',{
+                    props: { type: "text", readonly: true, value: row.arrive },
+                    style: { width: "80%", marginLeft: "10px" } })
+                ])
+              ])
+            }
+          })
+          // console.log(row)
         },
         // 离职
         resign(row){

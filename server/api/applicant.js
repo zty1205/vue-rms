@@ -49,5 +49,13 @@ router.get('/audit', (req, res, next) => {
   })
 })
 
-// 暴露一个中间件 不写就是几个函数  报错
+router.post('/addApplicant',(res, req, next) => {
+  applicant.create({
+    
+  },function (err, doc) {
+    
+  })
+})
+
+// 暴露一个中间件 不写就是几个函数的文件  报错
 module.exports = router
