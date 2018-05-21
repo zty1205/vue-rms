@@ -71,12 +71,12 @@
         return {
           NewUser: {
             uid: '',
-            name: null,
-            password: null,
-            email: null,
-            authorization: null,
-            avatar_url: null, // 头像
-            role: null // 职位
+            name: '',
+            password: '',
+            email: '',
+            authorization: '',
+            avatar_url: '', // 头像
+            role: '' // 职位
           },
           isShow: false,
           defeat: false,
@@ -131,9 +131,11 @@
               // console.log(this.NewUser)
               let AppUser = this.$store.getters.user // 用户
                 // 将用户和新添加的用户信息都发送过去
+              let nUser = this.NewUser
+              console.log(nUser)
               let info = {
-                User: AppUser,
-                NewUser: this.NewUser
+                AUser: AppUser,
+                NUser: nUser
               }
               user.register(info).then(res => {
                 console.log(res)
@@ -150,8 +152,8 @@
                 }
               })
             }
+            // this.$refs[name].resetFields();
           })
-          this.$refs[name].resetFields();
         },
         handleReset (name) {
           // console.log('cancel')
