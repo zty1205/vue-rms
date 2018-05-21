@@ -32,7 +32,7 @@
             <FormItem label="Email" prop="email">
               <Row>
                 <Col span="20">
-                <Input v-model="NewUser.email" size="large" :disabled="!isShow"/>
+                <Input v-model="NewUser.email" size="large" readonly="readonly"/>
                 </Col>
               </Row>
             </FormItem>
@@ -151,6 +151,7 @@
               })
             }
           })
+          this.$refs[name].resetFields();
         },
         handleReset (name) {
           // console.log('cancel')
