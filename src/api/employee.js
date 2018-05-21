@@ -46,6 +46,23 @@ export const findEmployee = (em) => {
   })
 }
 
+// 条件查询
+export const findEmployeeById = (eid) => {
+  // console.log(params)
+  let url = '/employee/findById'   // 已经有webpack代理了
+  return new Promise((resolve, reject)=> {
+    axios.get(url,{
+      params: {
+        eid: eid
+      }
+    }).then((res)=>{
+      resolve(res)
+    }).catch((err)=>{
+      reject(err)
+    })
+  })
+}
+
 // 添加员工
 export const addEmployee = (data) => {
   // console.log('addEmployee')

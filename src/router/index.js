@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+
 import images from '@/components/image/ImageList';
 import ImageBanner from '@/components/image/ImageBanner';
 import NotePad from '@/components/tools/NotePad';
@@ -13,6 +14,7 @@ import home from '@/components/views/home';
 import index from '@/components/index/index';
 import myself from '@/components/mine/myself';
 import AttendSalary from '@/components/mine/AttendSalary';
+import addUser from '@/components/mine/userAdd';
 // const login = resolve => require(['../components/views/login.vue'], resolve)
 
 Vue.use(Router)
@@ -80,6 +82,10 @@ export default new Router({
         {
           path: 'AttendSalary',
           component: AttendSalary
+        },
+        {
+          path: 'addUser',
+          component: addUser
         }
       ]
     }

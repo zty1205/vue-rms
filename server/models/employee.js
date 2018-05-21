@@ -15,6 +15,7 @@ const employeeSchema = new Schema({
   },
   phone:  String,
   address: String,
+  email: String,
   avatar: String, // 头像路径
   img: String,
   gender: String, //性别

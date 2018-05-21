@@ -112,7 +112,7 @@ router.get('/find',(req,res,next) => {
   }
   console.log(em)  // 返回的长度 由前端判断好了
   employee.find(em).then(employee =>{
-    console.log(employee)
+    // console.log(employee)
     if (!employee || employee.length ==0){
       res.json({
         isExist: false,
@@ -124,7 +124,27 @@ router.get('/find',(req,res,next) => {
         list: employee
       })
     }
-  })
+  }).catch(next)
+})
+
+router.get('/findById',(req,res,next) => {
+  const eid = req.query.eid;
+  employee.find({
+    eid: eid
+  }).then(employee =>{
+    // console.log(employee)
+    if (!employee || employee.length ==0){
+      res.json({
+        isExist: false,
+        list: null
+      })
+    }else{
+      res.json({
+        isExist:true,
+        list: employee
+      })
+    }
+  }).catch(next)
 })
 
 // url http://localhost:4000/employee/changeStatus?eid=YF000001&status=2
@@ -146,7 +166,7 @@ router.post('/changeStatus',(req,res,next) => {
         list: employee
       })
     }
-  })
+  }).catch(next)
 })
 
 module.exports = router

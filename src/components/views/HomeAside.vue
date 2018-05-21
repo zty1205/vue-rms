@@ -87,6 +87,11 @@
             考勤/工资
           </router-link>
         </MenuItem>
+        <MenuItem name="6-3">
+          <router-link to="/home/addUser" class="link-item">
+            用户添加
+          </router-link>
+        </MenuItem>
       </Submenu>
 
     </Menu>

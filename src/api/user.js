@@ -18,8 +18,18 @@ const User = {
         reject(err)
       })
     })
+  },
+ // 注册
+  register(data){
+    return new Promise((resolve,reject) => {   // 这样 得到的就是封装后的 数据 res.send 或 json 保存在data中
+      axios.post('/user/register',data).then((res) => {
+        // console.log('promise res' + res);
+        resolve(res)
+      }).catch(err => {
+        reject(err)
+      })
+    })
   }
-
 };
 
 export default User;
