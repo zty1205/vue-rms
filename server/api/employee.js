@@ -81,16 +81,21 @@ router.post('/add',(req,res,next) => {
   // console.log(req)
   //console.log(req.params)// {} 空对象
   // console.log(req.query)
-  const eid = req.body.eid;  // post 直接传vue里的json对象 后台就是在body中取数据
-  const name = req.body.name;
-  employee.create({
-    eid: eid,  // 数据可以保存进去
-    name: name,
-    age: '6',
-    role: 'test'
-  },function(err,doc){
+  const NewEmployee = req.body;  // post 直接传vue里的json对象 后台就是在body中取数据
+  employee.create(NewEmployee, function(err,doc){
       console.log(doc)  // doc  返回的是存储后的信息
-      res.send(doc)
+      if(!err){
+        res.json({
+          success: true,
+          list: doc
+        })
+      }else {
+        res.json({
+          success: false,
+          list: null,
+        })
+        console.log(err)
+      }
     return next   // 添加后才不会报错
   })
 })
