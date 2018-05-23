@@ -1,166 +1,157 @@
 <template>
-  <Row>
-    <Col>
-      <Form :model="employeeForm" ref="employeeForm" class="add-form">
-      <!-- 姓名 和 初始密码-->
-      <FormItem>
-        <Row>
-          <Col span="2">
-          <label class="add-form-label">姓名</label>
-          </Col>
-          <Col span="10">
+  <div>
+    <Form :model="employeeForm" ref="employeeForm" label-position="left" class="add-form" :label-width="100" :rules="ruleValidate">
+
+      <Row>
+        <Col span="9" offset="2">
+          <FormItem label="姓名" prop="name">
           <Input size="large" class="add-form-input" v-model="employeeForm.name" placeholder="Enter name..."/>
-          </Col>
-          <Col span="2">
-          <label class="add-form-label">初始密码</label>
-          </Col>
-          <Col span="10">
-          <!-- 初始密码 -->
+        </FormItem>
+        </Col>
+        <Col span="9" offset="2">
+          <FormItem label="密码" prop="password">
           <Input size="large" type="password" class="add-form-input" v-model="employeeForm.password" placeholder="Enter password..."/>
-          </Col>
-        </Row>
-      </FormItem>
-      <!--电话和地址-->
-      <FormItem>
-        <Row>
-          <Col span="2">
-          <label class="add-form-label">联系电话</label>
-          </Col>
-          <Col span="10">
+        </FormItem>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col span="9" offset="2">
+          <FormItem label="地址" prop="address">
+            <Input size="large" class="add-form-input" v-model="employeeForm.address" placeholder="Enter address..."/>
+        </FormItem>
+        </Col>
+        <Col span="9" offset="2">
+          <FormItem label="电话" prop="phone">
           <Input size="large" class="add-form-input" v-model="employeeForm.phone" placeholder="Enter phone..."/>
-          </Col>
-          <Col span="2">
-          <label class="add-form-label">家庭地址</label>
-          </Col>
-          <Col span="10">
-          <Input size="large" class="add-form-input" type="password" v-model="employeeForm.address" placeholder="Enter address..."/>
-          </Col>
-        </Row>
-      </FormItem>
-      <!--性别和年龄-->
-      <FormItem>
-        <Row>
-          <Col span="2">
-          <label class="add-form-label">性别</label>
-          </Col>
-          <Col span="10">
+        </FormItem>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col span="9" offset="2">
+          <FormItem label="性别" prop="gender">
           <RadioGroup size="large" v-model="employeeForm.gender">
             <Radio label="男">男</Radio>
             <Radio label="女">女</Radio>
           </RadioGroup>
-          </Col>
-          <Col span="2">
-          <label class="add-form-label">年龄</label>
-          </Col>
-          <Col span="10">
-          <Slider size="large" v-model="employeeForm.age" :min="18" :max="130" show-input></Slider>
-          </Col>
-        </Row>
-      </FormItem>
-      <!-- 入职时间 默认now-->
-      <FormItem>
-        <Row>
-          <Col span="2">
-          <label class="add-form-label">入职时间</label>
-          </Col>
-          <Col span="4">
-          <DatePicker size="large" type="date" placeholder="Select date" v-model="employeeForm.date"></DatePicker>
-          </Col>
-          <Col span="2" style="text-align: center">-</Col>
-          <Col span="4">
-          <TimePicker size="large" type="time" placeholder="Select time" v-model="employeeForm.time"></TimePicker>
-          </Col>
-          <Col span="2">
-          <label class="add-form-label">职位</label>
-          </Col>
-          <Col span="10">
-          <RadioGroup size="large" v-model="employeeForm.department">
-            <Radio label="1">组员</Radio>
-            <Radio label="2">经理</Radio>
-            <Radio label="3" :disabled="authorization <= 3">总监</Radio>
-          </RadioGroup>
-          </Col>
-        </Row>
-      </FormItem>
-      <!-- 部门  -->
-      <FormItem>
-        <Row>
-          <Col span="2">
-          <label class="add-form-label">一级部门</label>
-          </Col>
-          <Col span="10">
+        </FormItem>
+        </Col>
+        <Col span="9" offset="2">
+          <FormItem label="年龄" prop="age">
+           <Slider size="large" v-model="employeeForm.age" :min="18" :max="130" show-input></Slider>
+          </FormItem>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col span="9" offset="2">
+          <FormItem label="职位" prop="role">
+            <RadioGroup size="large" v-model="employeeForm.role">
+              <Radio label="1">组员</Radio>
+              <Radio label="2">经理</Radio>
+              <Radio label="3" :disabled="authorization <= 3">总监</Radio>
+            </RadioGroup>
+          </FormItem>
+        </Col>
+        <Col span="9" offset="2">
+          <FormItem label="角色" prop="role">
+            <RadioGroup size="large" v-model="employeeForm.status">
+              <Radio label="1">正式员工</Radio>
+              <Radio label="3">实习生</Radio>
+            </RadioGroup>
+          </FormItem>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col span="9" offset="2">
+          <FormItem label="一级部门" prop="department">
           <Select size="large" v-model="employeeForm.department">
             <Option value="1">研发部</Option>
-            <Option value="2" >业务部</Option>
-            <Option value="3" >后勤部</Option>
-            <Option value="4" >人事部</Option>
+            <Option value="2">业务部</Option>
+            <Option value="3">后勤部</Option>
+            <Option value="4">人事部</Option>
           </Select>
-          </Col>
-          <Col span="2">
-          <label class="add-form-label">二级部门</label>
-          </Col>
-          <Col span="10">
-          <Select  size="large" v-model="employeeForm.department">
+        </FormItem>
+        </Col>
+        <Col span="9" offset="2">
+          <FormItem label="二级部门" prop="subD">
+          <Select  size="large" v-model="employeeForm.subD">
             <Option value="1">研发部</Option>
-            <Option value="2" >业务部</Option>
-            <Option value="3" >后勤部</Option>
-            <Option value="4" >人事部</Option>
+            <Option value="2">业务部</Option>
+            <Option value="3">后勤部</Option>
+            <Option value="4">人事部</Option>
           </Select>
-          </Col>
-        </Row>
+        </FormItem>
+        </Col>
+      </Row>
 
-      </FormItem>
+      <Row>
+        <Col span="9" offset="2">
+          <FormItem label="入职时间" prop="arrive">
+          <DatePicker size="large" type="date" placeholder="Select date" v-model="employeeForm.arrive"></DatePicker>
+        </FormItem>
+        </Col>
+        <Col span="9" offset="2">
+          <FormItem label="Email" prop="email">
+          <Input size="large" v-model="employeeForm.email" placeholder='请输入邮箱'/>
+        </FormItem>
+        </Col>
+      </Row>
+
 
       <!--图片和头像 先不考虑-->
-      <FormItem style="margin-top: 60px">
-        <label class="photo-label">头像</label>
-        <div class="demo-upload-list" v-for="item in uploadList">
-          <template v-if="item.status === 'finished'">
-            <img :src="item.url">
-            <div class="demo-upload-list-cover">
-              <Icon type="ios-eye-outline" @click.native="handleView(item.name)" size="30"></Icon>
-              <Icon type="ios-trash-outline" @click.native="handleRemove(item)" size="30"></Icon>
-            </div>
-          </template>
-          <template v-else>
-            <Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
-          </template>
-        </div>
-        <Upload
-          ref="upload"
-          :show-upload-list="false"
-          :default-file-list="defaultList"
-          :on-success="handleSuccess"
-          :format="['jpg','jpeg','png']"
-          :max-size="2048"
-          :on-format-error="handleFormatError"
-          :on-exceeded-size="handleMaxSize"
-          :before-upload="handleBeforeUpload"
-          multiple
-          type="drag"
-          action="//jsonplaceholder.typicode.com/posts/"
-          style="display: inline-block;width:158px;">
-          <div style="width: 158px;height:158px;line-height: 158px;">
-            <Icon type="camera" size="100" style="margin-top: 30px;"></Icon>
-          </div>
-        </Upload>
-        <Modal title="View Image" v-model="visible">
-          <img :src="'https://o5wwk8baw.qnssl.com/' + imgName + '/large'" v-if="visible" style="width: 100%">
-        </Modal>
-      </FormItem>
+      <!--<FormItem style="margin-top: 60px">-->
+      <!--<label class="photo-label">头像</label>-->
+      <!--<div class="demo-upload-list" v-for="item in uploadList">-->
+      <!--<template v-if="item.status === 'finished'">-->
+      <!--<img :src="item.url">-->
+      <!--<div class="demo-upload-list-cover">-->
+      <!--<Icon type="ios-eye-outline" @click.native="handleView(item.name)" size="30"></Icon>-->
+      <!--<Icon type="ios-trash-outline" @click.native="handleRemove(item)" size="30"></Icon>-->
+      <!--</div>-->
+      <!--</template>-->
+      <!--<template v-else>-->
+      <!--<Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>-->
+      <!--</template>-->
+      <!--</div>-->
+      <!--<Upload-->
+      <!--ref="upload"-->
+      <!--:show-upload-list="false"-->
+      <!--:default-file-list="defaultList"-->
+      <!--:on-success="handleSuccess"-->
+      <!--:format="['jpg','jpeg','png']"-->
+      <!--:max-size="2048"-->
+      <!--:on-format-error="handleFormatError"-->
+      <!--:on-exceeded-size="handleMaxSize"-->
+      <!--:before-upload="handleBeforeUpload"-->
+      <!--multiple-->
+      <!--type="drag"-->
+      <!--action="//jsonplaceholder.typicode.com/posts/"-->
+      <!--style="display: inline-block;width:158px;">-->
+      <!--<div style="width: 158px;height:158px;line-height: 158px;">-->
+      <!--<Icon type="camera" size="100" style="margin-top: 30px;"></Icon>-->
+      <!--</div>-->
+      <!--</Upload>-->
+      <!--<Modal title="View Image" v-model="visible">-->
+      <!--<img :src="'https://o5wwk8baw.qnssl.com/' + imgName + '/large'" v-if="visible" style="width: 100%">-->
+      <!--</Modal>-->
+      <!--</FormItem>-->
       <!---->
 
       <div class="form-btn">
         <Button type="primary" @click="handleSubmit('employeeForm')">Submit</Button>
-        <Button type="ghost" @click="handleSubmit('employeeForm')" style="margin-left: 18px">Cancel</Button>
+        <Button type="ghost" @click="handleReset('employeeForm')" style="margin-left: 18px">Cancel</Button>
       </div>
 
     </Form>
-    </Col>
-  </Row>
+
+  </div>
 </template>
 
 <script>
+  import { addEmployee } from '../../api/employee'
   export default {
     data(){
       return {
@@ -169,32 +160,45 @@
           password: '',
           phone: '',
           address: '',
+          email: '',
           gender: '',
-          age: null,
-          date: null,
-          time: null,
-          department: null,
-          role: ''
+          age: 18,
+          arrive: '',
+          department: '',
+          subD: '',
+          role: '',
+          status: ''
         },
-        // 图片 上传
-        defaultList: [
-          {
-            'name': 'a42bdcc1178e62b4694c830f028db5c0',
-            'url': 'https://o5wwk8baw.qnssl.com/a42bdcc1178e62b4694c830f028db5c0/avatar'
-          },
-          {
-            'name': 'bc7521e033abdd1e92222d733590f104',
-            'url': 'https://o5wwk8baw.qnssl.com/bc7521e033abdd1e92222d733590f104/avatar'
-          }
-        ],
-        imgName: '',
-        visible: false,
-        uploadList: []
+        emailAppend: '',  // 邮箱后缀
+        // 表单验证
+        ruleValidate: {
+          name: [
+            {required: true, message: 'The name cannot be empty', trigger: 'blur'}
+          ],
+          password: [
+            {required: true, message: 'The password cannot be empty', trigger: 'blur'},
+          ],
+          address: [
+            {required: true, message: 'The address cannot be empty', trigger: 'blur'}
+          ],
+          email: [
+            {required: true, message: 'The email cannot be empty', trigger: 'blur'},
+            {type: 'email',message: 'Please input the correct email', trigger: 'blur' }
+          ],
+          department: [
+            {required: true, message: 'Please select department', trigger: 'blur'}
+          ],
+          subD: [
+            {required: true, message: 'Please select subD', trigger: 'blur'}
+          ],
+          role: [
+            {required: true, message: 'Please select role', trigger: 'blur'}
+          ],
+          status: [
+            {required: true, message: 'Please select status', trigger: 'blur'}
+          ]
+        }
       }
-    },
-    mounted () {
-      // 初始化上传
-      this.uploadList = this.$refs.upload.fileList;
     },
     computed: {
       authorization(){
@@ -202,45 +206,36 @@
       }
     },
     methods: {
-      handleSubmit (name) {
-        this.$Message.success('Success!');
+      handleSubmit(name) {
+        this.$refs[name].validate((valid) => {
+          if (valid) {
+            let em = this.employeeForm
+            addEmployee(em).then( res => {
+              let data = res.data
+              if(data && data.success){
+                // 员工添加成功
+                this.$Notice.success({
+                  title: '添加员工',
+                  render: h => {
+                    return h('div',[
+                      h('a',data.list.name),
+                      h('span', '的信息已成功录入系统')
+                    ])
+                  }
+                });
+              }else {
+                // 员工添加失败
+                this.$Notice.error({
+                  title: '添加员工',
+                  desc: '员工添加失败，请重试！'
+                });
+              }
+            })
+          }
+        })
       },
-      handleReset (name) {
+      handleReset(name) {
         this.$refs[name].resetFields();
-      },
-      // 图片上传 处理
-      handleView (name) {
-        this.imgName = name;
-        this.visible = true;
-      },
-      handleRemove (file) {
-        const fileList = this.$refs.upload.fileList;
-        this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
-      },
-      handleSuccess (res, file) {
-        file.url = 'https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar';
-        file.name = '7eb99afb9d5f317c912f08b5212fd69a';
-      },
-      handleFormatError (file) {
-        this.$Notice.warning({
-          title: 'The file format is incorrect',
-          desc: 'File format of ' + file.name + ' is incorrect, please select jpg or png.'
-        });
-      },
-      handleMaxSize (file) {
-        this.$Notice.warning({
-          title: 'Exceeding file size limit',
-          desc: 'File  ' + file.name + ' is too large, no more than 2M.'
-        });
-      },
-      handleBeforeUpload () {
-        const check = this.uploadList.length < 5;
-        if (!check) {
-          this.$Notice.warning({
-            title: 'Up to five pictures can be uploaded.'
-          });
-        }
-        return check;
       }
     }
   }
@@ -249,6 +244,7 @@
 <style scoped>
   .add-form {
     width: 100%;
+    margin-top: 120px;
   }
   .add-form-input {
     /*width: 70%;*/
@@ -258,50 +254,14 @@
     font-size: 12px;
     color: #495060;
   }
-.form-btn {
-  margin-top: 60px;
-}
-.photo-label {
-  font-size: 30px;
-  margin-right: 40px;
-  margin-left: 20px;
-  float: left;
-}
-  /* 图片上传相关 */
-  .demo-upload-list{
-    display: inline-block;
-    width: 160px;
-    height: 160px;
-    text-align: center;
-    line-height: 160px;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    overflow: hidden;
-    background: #fff;
-    position: relative;
-    box-shadow: 0 1px 1px rgba(0,0,0,.2);
-    margin-right: 4px;
+  .form-btn {
+    margin-top: 60px;
   }
-  .demo-upload-list img{
-    width: 100%;
-    height: 100%;
+  .photo-label {
+    font-size: 30px;
+    margin-right: 40px;
+    margin-left: 20px;
+    float: left;
   }
-  .demo-upload-list-cover{
-    display: none;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0,0,0,.6);
-  }
-  .demo-upload-list:hover .demo-upload-list-cover{
-    display: block;
-  }
-  .demo-upload-list-cover i{
-    color: #fff;
-    font-size: 20px;
-    cursor: pointer;
-    margin: 0 2px;
-  }
+
 </style>

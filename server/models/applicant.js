@@ -13,10 +13,12 @@ const applicantSchema = new Schema({
     required: true
   },
   applicantId : String,  // 申请人
+  applicantName : String,
   applicant_reason : String,
   auditorId : String,  // 审批人
+  auditorName : String,
   auditor_reason : String,
-  status : Number  // 不通过 0 等待 1  通过 2
+  status : [Number, String]
 })
 
 const applicant = mongoose.model('applicant', applicantSchema)

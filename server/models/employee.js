@@ -1,11 +1,10 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-// 企业员工 MongoDB Schema模型
+// 企业员工 MongoDB Schema模型  // 这里的验证不通过的话 会在后台报错
 const employeeSchema = new Schema({
   eid:{
     type: String,
-    required: [true, 'Name fields is required'],
     unique: true
   },
   name: String,

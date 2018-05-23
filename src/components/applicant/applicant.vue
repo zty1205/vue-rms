@@ -22,16 +22,37 @@
           <Table :load="loading" border :columns="auditColumns" :data="auditData"></Table>
         </Col>
       </Row>
+
+      <!-- 添加申请的模态框 -->
+      <Modal v-model="modal" title="请假申请" :loading="modalLoading" @on-cancel="AppCancel('newAppForm')" @on-ok="AppOK('newAppForm')">
+        <Form :model="newAppForm" :label-width="100" ref="newAppForm">
+          <FormItem label="开始时间" prop="beginTime">
+            <DatePicker type="datetime" v-model="newAppForm.beginTime"
+                        format="yyyy-MM-dd HH:mm" style="width: 200px">
+            </DatePicker>
+          </FormItem>
+          <FormItem label="结束时间" prop="endTime">
+            <DatePicker type="datetime" v-model="newAppForm.endTime"
+                        format="yyyy-MM-dd HH:mm" style="width: 200px">
+            </DatePicker>
+          </FormItem>
+          <FormItem label="申请理由" prop="applicant_reason">
+            <Input v-model="newAppForm.applicant_reason" type="textarea" placeholder="请输入请假理由"></Input>
+          </FormItem>
+        </Form>
+      </Modal>
+
     </div>
 </template>
 
 <script>
   import axios from 'axios'
-  import {getAudit,getApply} from '../../api/applicant'
+  import {getAudit,getApply, changeApplicantStatus, addApplicant} from '../../api/applicant'
   const applicatStatusMap = {
-    0: '驳回申请',
-    1: '等待审核',
-    2: '审核通过'
+    '-1': '申请驳回',
+    '0': '已撤回',
+    '1': '等待审核',
+    '2': '审核通过'
   }
     export default {
       data(){
@@ -78,29 +99,36 @@
               title: '状态',
               key: 'status',
               align: 'center',
-              width: 130,
+              width: 140,
               render: (h, params) => {
                 let status = params.row.status
                 let stat = applicatStatusMap[status]
-                if(status == 0){
+                if(status == '-1'){
                   // 审核驳回
                   return h('strong', {
                     style: {
                       color: 'red'
                     }
                   },stat)
-                }else if(status == 1){
+                }else if(status == '0'){
+                  // 已撤回
+                  return h('strong', {
+                    style: {
+                      color: 'silver'
+                    }
+                  },stat)
+                }else if(status == '1'){
                   // 等待审核
                   return h('strong', {
                     style: {
-                      color: 'green'
+                      color: 'blue'
                     }
                   },stat)
-                }else{
+                }else if(status == '2'){
                   // 审核通过
                   return h('strong', {
                     style: {
-                      color: 'blue'
+                      color: 'green'
                     }
                   },stat)
                 }
@@ -109,12 +137,70 @@
             {
               title: "操作",
               key: "action",
-              width: 100,
+              width: 180,
               align: 'center',
               fixed: 'right',
               render: (h, params) => {
                 let status = params.row.status
-                if (status == 1) {
+                if (status == '-1') { // 已驳回 可以重新提交或删除
+                  return h('div',[
+                    h('Button', {
+                      props: {
+                        type: 'info',
+                        size: "small"
+                      },
+                      on: {
+                        click: () => {
+                          this.changeStatus(params.row, 1)
+                        }
+                      }
+                    }, '重新提交'),
+                    h('Button', {
+                      props: {
+                        type: 'error',
+                        size: "small"
+                      },
+                      style: {
+                        marginLeft: '5px'
+                      },
+                      on: {
+                        click: () => {
+                          this.remove(params.index)
+                        }
+                      }
+                    }, '删除')
+                    ]
+                  )
+                } else if (status == '0') { // 已撤回 可以重新提交
+                  return h('div',[
+                    h('Button', {
+                      props: {
+                        type: 'info',
+                        size: "small"
+                      },
+                      on: {
+                        click: () => {
+                          this.changeStatus(params.row, 1)
+                        }
+                      }
+                    }, '重新提交'),
+                    h('Button', {
+                      props: {
+                        type: 'error',
+                        size: "small"
+                      },
+                      style: {
+                        marginLeft: '5px'
+                      },
+                      on: {
+                        click: () => {
+                          this.remove(params.index)
+                        }
+                      }
+                    }, '删除')
+                  ])
+                } else if (status == '2'){
+                  // 申请通过 可以撤回
                   return h('Button', {
                     props: {
                       type: 'info',
@@ -122,10 +208,23 @@
                     },
                     on: {
                       click: () => {
+                        this.changeStatus(params.row, 0)
+                      }
+                    }
+                  }, '撤回')
+                } else {
+                  // 等待的 可以取消
+                  return h('Button', {
+                    props: {
+                      type: 'ghost',
+                      size: "small"
+                    },
+                    on: {
+                      click: () => {
                         this.remove(params.index)
                       }
                     }
-                  }, "撤回")
+                  }, '取消')
                 }
               }
             }
@@ -172,7 +271,7 @@
               title: '状态',
               key: 'status',
               align: 'center',
-              width: 130,
+              width: 140,
               render: (h, params) => {
                 let status = params.row.status
                 let stat = applicatStatusMap[status]
@@ -208,7 +307,7 @@
               fixed: 'right',
               render: (h, params) => {
                 let status = params.row.status
-                if (status == 1) {
+                if (status == '1') {
                   return h('div', [
                     h('Button', {
                       props: {
@@ -220,7 +319,7 @@
                       },
                       on: {
                         click: () => {
-                          this.approve(params.row)
+                          this.changeStatus(params.row, 2)
                         }
                       }
                     }, '批准'),
@@ -231,7 +330,7 @@
                       },
                       on: {
                         click: () => {
-                          this.reject(params.row)
+                          this.changeStatus(params.row, -1)
                         }
                       }
                     }, '驳回')
@@ -242,12 +341,27 @@
           ],
           applyData: [],
           auditData: [],
-          loading: false
+          loading: false,  // 表格的加载
+          modal: false, // 模态框显示
+          modalLoading: false, // 模态框异步加载
+          newAppForm: { // 新的申请条  对时间进行判断 1 小的作为开始时间 2 使用验证器
+            beginTime : '',
+            endTime : '',
+            applicant_reason : "",
+            applicantId: '',
+            applicantName: '',
+            auditorName: 'zty',
+            auditorId: '100001',
+            status: '1'
+          }
         }
       },
       computed: {
         aid(){
           return  this.$store.getters.uid
+        },
+        user(){
+          return this.$store.getters.user
         }
       },
       mounted() {
@@ -276,19 +390,61 @@
         // 发起申请
         applicant() {
           let aid = this.aid
-          console.log(aid)
+          // console.log(aid)
+          this.modal = true
+        },
+        // 模态框确定的回调函数
+        AppOK (name) {
+          // console.log(this.newAppForm)
+          let form = this.newAppForm
+          // 先写死审批人  可以使用员工id前缀 利用模糊查询来找到员工的上级 或者 zty
+          form.qid = '000010'
+          let Uid = this.user.uid
+          let Uname = this.user.name
+          // console.log(user)
+          form.applicantId = Uid + ''
+          form.applicantName = Uname + ''
+          // console.log(form)
+          addApplicant(form).then(res => {
+            // console.log(res)
+            let data = res.data
+            if(data.success){
+              // 添加成功 显示消息 并刷新列表
+              this.$Message.success('你的请假条已提交，正在等待审核。');
+              this.loading = true
+              this.init()
+            }else {
+              this.$Message.error('请假条提交失败，请重试。');
+            }
+            this.$refs[name].resetFields();
+            this.modal = false;
+          })
+        },
+        // 模态框取消的回调函数
+        AppCancel(name){
+          this.$refs[name].resetFields();
+          this.modal = false
         },
         // 撤销申请
         remove (index) {
           this.applyData.splice(index, 1);
         },
-        // 批准申请
-        approve(row){
-
-        },
-        // 驳回申请
-        reject(row){
-
+        // 更改请假条状态
+        changeStatus(row, status){
+          console.log(row)
+          let qid = row.qid
+          changeApplicantStatus(qid, status).then(res => {
+            let data = res.data
+            // console.log(res)
+            if(data.success){
+              // 修改状态成功
+              this.loading = true
+              this.init()
+              this.$Message.success('请假条状态已修改！');
+            }else {
+              this.$Message.error('更改请假条失败，请重试。');
+            }
+          })
         }
       }
     }
