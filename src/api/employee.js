@@ -46,7 +46,6 @@ export const findEmployee = (em) => {
   })
 }
 
-// 条件查询
 export const findEmployeeById = (eid) => {
   // console.log(params)
   let url = '/employee/findById'   // 已经有webpack代理了
@@ -76,7 +75,7 @@ export const addEmployee = (data) => {
       resolve(res)
     }).catch((err)=>{
       console.log(err)
-      resolve(err)
+      reject(err)
       // reject(err)
     })
   })
