@@ -1,26 +1,15 @@
 <template>
     <div class="Layout">
       <Row>
-        <Carousel  v-model="value2" loop :autoplay-speed="speed"> <!-- autoplay -->
-          <CarouselItem>
-            <div class="demo-carouse1">
-              <div class="img-container1"></div>
-            </div>
-          </CarouselItem>
-          <CarouselItem>
-            <div class="demo-carouse1">
-              <div class="img-container2"></div>
-            </div>
-          </CarouselItem>
-          <CarouselItem>
-            <div class="demo-carouse1">
-              <div class="img-container3"></div>
-            </div>
-          </CarouselItem>
-        </Carousel>
-        <!--<div class="img-container">-->
-          <!--<p class="img-innerDes">Apollo 如期而至</p>-->
-        <!--</div>-->
+        <Form>
+          <FormItem>
+            <Input v-model="Uname"/>
+          </FormItem>
+          <FormItem>
+            <input type="file" ref="upload" id="file" @change="getImg">
+          </FormItem>
+        </Form>
+        <img src="../../../server/public/test.jpg" width="100px" height="100px;">
       </Row>
 
       <h1 class="news-title">公司动态</h1>
@@ -91,12 +80,30 @@
 </template>
 
 <script>
+  import axios from 'axios'
 // 首页 介绍公司
 export default {
   data() {
     return {
       value2: 1,
-      speed: 3000
+      speed: 3000,
+      Uname: ''
+    }
+  },
+  methods: {
+    getImg(){
+      let formData = new FormData();
+      formData.append('file',this.$refs.upload.files[0]);
+      axios({
+        method:'post',
+        url: '/api/images/add',
+        anync:true,
+        contentType:false,
+        processData:false,
+        data:formData
+      }).then(function(res){
+        console.log(res)
+      })
     }
   }
 }
