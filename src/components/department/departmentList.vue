@@ -1,11 +1,26 @@
 <template>
     <div>
       <Table ref="deparTable" size="large" height="600" :loading="tableLoading" :columns="columns" :data="data"></Table>
+
+      <!--添加部门的模态框-->
+      <Modal v-model="modal" :title="Title" :loading="modalLoading" @on-cancel="modalCancel('addDP')" @on-ok="modalOK('addDP')">
+        <Form ref="addDP" :model="addDP" :label-width="100" :rules="ruleValidate">
+          <FormItem label="父级部门">
+            <Input v-model="parent_name" size="large" readonly="readonly"/>
+          </FormItem>
+          <FormItem label="部门名" prop="name">
+            <Input v-model="addDP.name" size="large" placeholder="请输入子级部门名"/>
+          </FormItem>
+          <FormItem label="部门等级">
+            <Input v-model="addDP.range" size="large" readonly="readonly"/>
+          </FormItem>
+        </Form>
+      </Modal>
     </div>
 </template>
 
 <script>
-  import {fetchDepartmentList} from '../../api/department'
+  import {fetchDepartmentList, addDepartment} from '../../api/department'
     export default {
       data(){
         return {
@@ -77,7 +92,7 @@
                         },
                         on: {
                           click: () => {
-                            this.addChildDepartment(params.row)
+                            this.addChildDepartment(params.row,1)
                           }
                         }
                       }, '添加子部门')
@@ -95,7 +110,7 @@
                         },
                         on: {
                           click: () => {
-                            this.addChildDepartment(params.row)
+                            this.addChildDepartment(params.row,2)
                           }
                         }
                       }, '添加子部门'),
@@ -139,7 +154,7 @@
                         },
                         on: {
                           click: () => {
-                            this.addChildDepartment(params.row)
+                            this.addChildDepartment(params.row,2)
                           }
                         }
                       }, '添加子部门')
@@ -163,7 +178,22 @@
             }
           ],
           data: [],
-          tableLoading: false
+          tableLoading: false,
+          modal: false,
+          Title: '',
+          modalLoading: false,
+          parent_name: '',
+          // 添加部门的表单
+          addDP: {
+            parent_id: '',
+            name: '',
+            range: 2
+          },
+          ruleValidate: {
+            name: [
+              {required: true, message: 'The name cannot be empty', trigger: 'blur'}
+            ]
+          }
         }
       },
       computed: {
@@ -186,8 +216,60 @@
             this.tableLoading = false
           })
         },
-        addChildDepartment (row) {
-
+        addChildDepartment (row, range) {
+          // 显示模态框
+          if(range === 1){
+            this.Title = '添加一级部门'
+          }else {
+            this.Title = '添加二级部门'
+          }
+          // console.log(range)
+          let dp = this.addDP
+          dp.range = range
+          this.parent_name = row.name
+          dp.parent_id = row.did
+          this.modal = true
+        },
+        modalOK(name){
+          this.$refs[name].validate((valid) => {
+            if (valid) {
+              let info = this.addDP
+              addDepartment(info).then(res=>{
+                let data =res.data
+                if(data.success){
+                  // 添加成功
+                  // console.log('添加成功')
+                  let dp = data.list
+                  // console.log(dp)
+                  this.$Notice.success({
+                    title: '添加部门',
+                    desc: dp.name + ' 部门已成功添置公司，其id为 ' + dp.did,
+                    duration: 2,
+                    onClose: ()=>{  // 关闭的回调函数
+                      this.initTable()
+                    }
+                  });
+                  this.$refs[name].resetFields();
+                  this.modal = false
+                }else {
+                  // 添加失败
+                  // console.log('添加失败')
+                  this.$Notice.error({
+                    title: '添加部门',
+                    desc: '添加部门失败，请重试！'
+                  });
+                  this.$refs[name].resetFields();
+                  this.modal = false
+                }
+              })
+            } else {
+              this.$Message.error('Fail!');
+            }
+          })
+        },
+        modalCancel(name){
+          this.$refs[name].resetFields();
+          this.modal = false
         },
         remove (index) {
           // 这只是表面删除 真的的删除不仅要删除部门的数据 还有员工表的相关数据

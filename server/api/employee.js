@@ -18,7 +18,7 @@ router.get('/list', (req, res, next) => {   // 路由为 4000/employee/list
   let size = parseInt(sizeString)
   // let count = 0
   // 这样子稍微好一点 但每次分页仍需查一次总数 应不应该单独拿出来 只允许刚开始的一次
-  // 删除后 进行获取 应该保留下来
+  // 删除后 进行获取 应该保留查询总数
   employee.count({},(err,count)=>{
     employee.find({}).limit(size).skip(page * size).then(employee => {
       // console.log(employee)

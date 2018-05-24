@@ -3,7 +3,7 @@
       <Row style="margin-top: 100px" v-if="auth > 2" >
         <Col span="8" offset="8">
           <Form :model="NewUser" ref="NewUser" label-position="left" :label-width="80" :rules="ruleValidate">
-
+            <p class="form-info">只能为已存在的员工添加登录系统权限</p>
             <FormItem label="ID" prop="uid">
               <Row>
                 <Col span="20">
@@ -132,23 +132,29 @@
               let AppUser = this.$store.getters.user // 用户
                 // 将用户和新添加的用户信息都发送过去
               let nUser = this.NewUser
-              console.log(nUser)
+              // console.log(nUser)
               let info = {
                 AUser: AppUser,
                 NUser: nUser
               }
               user.register(info).then(res => {
-                console.log(res)
+                // console.log(res)
                 let data = res.data
                 if(data && data.success){
                   this.$Notice.success({
                     title: '用户注册',
                     desc: '用户注册成功，稍后会将账户信息发送该员工到邮箱。'
                   });
+                  this.isShow = false
+                  this.defeat = false
+                  this.$refs[name].resetFields();
                 }else {
                   this.$Notice.error({
                     desc: '用户注册失败。'
                   });
+                  this.isShow = false
+                  this.defeat = false
+                  this.$refs[name].resetFields();
                 }
               })
             }
@@ -172,5 +178,12 @@
     font-size: 40px;
     margin: 100px auto;
     color: red;
+  }
+  .form-info {
+    text-align: left;
+    font-size: 12px;
+    color: red;
+    display: block;
+    margin-bottom: 4px;
   }
 </style>

@@ -47,8 +47,6 @@
         <label class="custom-label">至</label><InputNumber :max="columns.length-1" :min="0" v-model="endRow" size="small"></InputNumber>
       </div>
 
-
-      <!--<employee-add></employee-add>-->
     </div>
 </template>
 
@@ -242,92 +240,101 @@
               width: 200,
               align: 'center',
               render: (h, params) => {
-                let status = params.row.status
-                if(status == 0){
-                  // 员工已离职 添加删除员工按钮
-                  return h('Button',{
-                    props: {
-                      type: 'error',
-                      size: 'small'
-                    },
-                    on: {
-                      click: () => {
-                        this.delete(params.index)
-                      }
-                    }
-                  },'删除')
-                }
-                else if(status == 3) {
-                  // 实习生还需要添加转正按钮
-                  return h('div', [
-                    h('Button', {
-                      props: {
-                        type: 'primary',
-                        size: 'small'
-                      },
-                      style: {
-                        marginRight: '10px'
-                      },
-                      on: {
-                        click: () => {
-                          this.detail(params.row)
-                        }
-                      }
-                    }, '详情'),
-                    h('Button', {
-                      props: {
-                        type: 'success',
-                        size: 'small'
-                      },
-                      style: {
-                        marginRight: '10px'
-                      },
-                      on: {
-                        click: () => {
-                          this.becomeMember(params.row)
-                        }
-                      }
-                    }, '转正'),
-                    h('Button', {
+                if(this.authority > 2){
+                  let status = params.row.status
+                  if(status == 0){
+                    // 员工已离职 添加删除员工按钮
+                    return h('Button',{
                       props: {
                         type: 'error',
                         size: 'small'
                       },
                       on: {
                         click: () => {
-                          this.resign(params.row)
+                          this.delete(params.index)
                         }
                       }
-                    }, '离职')  // 离职也改状态 添加一个删除已离职员工的按钮
-                  ]);
+                    },'删除')
+                  }
+                  else if(status == 3) {
+                    // 实习生还需要添加转正按钮
+                    return h('div', [
+                      h('Button', {
+                        props: {
+                          type: 'primary',
+                          size: 'small'
+                        },
+                        style: {
+                          marginRight: '10px'
+                        },
+                        on: {
+                          click: () => {
+                            this.detail(params.row)
+                          }
+                        }
+                      }, '详情'),
+                      h('Button', {
+                        props: {
+                          type: 'success',
+                          size: 'small'
+                        },
+                        style: {
+                          marginRight: '10px'
+                        },
+                        on: {
+                          click: () => {
+                            this.becomeMember(params.row)
+                          }
+                        }
+                      }, '转正'),
+                      h('Button', {
+                        props: {
+                          type: 'error',
+                          size: 'small'
+                        },
+                        on: {
+                          click: () => {
+                            this.resign(params.row)
+                          }
+                        }
+                      }, '离职')  // 离职也改状态 添加一个删除已离职员工的按钮
+                    ]);
+                  }else {
+                    return h('div', [
+                      h('Button', {
+                        props: {
+                          type: 'primary',
+                          size: 'small'
+                        },
+                        style: {
+                          marginRight: '10px'
+                        },
+                        on: {
+                          click: () => {
+                            this.detail(params.row)
+                          }
+                        }
+                      }, '详情'),
+                      h('Button', {
+                        props: {
+                          type: 'error',
+                          size: 'small'
+                        },
+                        on: {
+                          click: () => {
+                            this.resign(params.index)
+                          }
+                        }
+                      }, '离职')
+                    ]);
+                  }
                 }else {
-                  return h('div', [
-                    h('Button', {
-                      props: {
-                        type: 'primary',
-                        size: 'small'
-                      },
-                      style: {
-                        marginRight: '10px'
-                      },
-                      on: {
-                        click: () => {
-                          this.detail(params.row)
-                        }
-                      }
-                    }, '详情'),
-                    h('Button', {
-                      props: {
-                        type: 'error',
-                        size: 'small'
-                      },
-                      on: {
-                        click: () => {
-                          this.resign(params.index)
-                        }
-                      }
-                    }, '离职')
-                  ]);
+                  return h('strong', {
+                    style: {
+                      color: '#ccc8c8',
+                      fontSize: '16px'
+                    }
+                  },'你不具备有操作权限')
                 }
               }
             }
@@ -352,8 +359,10 @@
           }
         }
       },
-      components: {
-        employeeAdd
+      computed: {
+        authority() {
+          return this.$store.getters.authorization
+        }
       },
       mounted(){
         this.initList()
