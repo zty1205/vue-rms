@@ -119,3 +119,16 @@ export const deleteEmployee = (eid) => {
     })
   })
 }
+
+// 修改员工信息
+export const updateEmployee = (employee) => {
+  let url = '/employee/update'
+  return new Promise((resolve, reject)=> {
+    axios.post(url,employee).then(res => {
+      resolve(res)
+    }).catch((err)=>{
+      console.log(err)
+      reject(err)
+    })
+  })
+}

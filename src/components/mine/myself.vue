@@ -31,8 +31,8 @@
               <Input v-model="Mime.arrive" :disabled="isDisabled" size="large"/>
             </FormItem>
             <FormItem style="margin-top: 20px;">
-              <Button type="primary" icon="wrench">修改</Button>
-              <Button type="ghost" icon="folder" style="margin-left: 8px">保存</Button>
+              <Button type="primary" icon="wrench" @click="edit">{{ btnName }}</Button>
+              <Button type="ghost" icon="folder" style="margin-left: 8px" @click="save">保存</Button>
             </FormItem>
           </Form>
         </Col>
@@ -48,7 +48,7 @@
 </template>
 
 <script>
-  import { findEmployee } from '../../api/employee'
+  import { findEmployee, updateEmployee } from '../../api/employee'
   const roleMap = {
     3: '总监',
     2: '经理',
@@ -77,7 +77,8 @@
             arrive: null
           },
           isEdit: true,  // 自己可修改
-          isDisabled:true  // 自己不可修改上司才可以
+          isDisabled:true,  // 自己不可修改上司才可以
+          btnName: '修改'
         }
       },
       computed: {
@@ -114,6 +115,31 @@
               mime.arrive = data.list[0].arrive
             }
           })
+        },
+        // 点击修改
+        edit(){
+          this.isEdit = !this.isEdit
+          if(this.isEdit){
+            this.btnName = '修改'
+          }else {
+            this.initPerson()
+            this.btnName = '取消'
+          }
+        },
+        // 修改员工表里员工自己的信息
+        save(){
+          console.log(this.Mime)
+          // let employee = this.Mime
+          // updateEmployee(employee).then(res => {
+          //   let data = res.data
+          //   if(data.success){
+          //     // 修改成功
+          //     console.log('success')
+          //   }else {
+          //     // 修改失败
+          //     console.log('defeat')
+          //   }
+          // })
         }
       }
     }

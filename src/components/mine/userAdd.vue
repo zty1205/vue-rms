@@ -182,7 +182,7 @@
   .form-info {
     text-align: left;
     font-size: 12px;
-    color: red;
+    color: blue;
     display: block;
     margin-bottom: 4px;
   }

@@ -174,4 +174,22 @@ router.post('/changeStatus',(req,res,next) => {
   }).catch(next)
 })
 
+router.post('/update',(req,res,next) => {
+  const employee = req.body
+  let eid = employee.eid
+  employee.update({eid: eid},{},{new: true}).then(employee =>{
+    if (!employee || employee.length ==0){
+      res.json({
+        success: false,
+        list: null
+      })
+    }else{
+      res.json({
+        success:true,
+        list: employee
+      })
+    }
+  }).catch(next)
+})
+
 module.exports = router
