@@ -1,0 +1,4 @@
+{"_id":{"$oid":"5ae6a1a0c9e886094055acd9"},"uid":"100001","name":"zty","password":"root","authorization":9,"avatar_url":"https://pacdn.500px.org/527106/49546659c55dad2d216b9bf8de1d9cd410f34cd3/2.jpg?2"}
+{"_id":{"$oid":"5b0250c57e4cd80e6020ca36"},"uid":"YF000001","name":"研姐姐","password":"18FCD73EAE8F118B0BF5F4CF5D1D766E","email":"1160051490@qq.com","authorization":3,"avatar_url":"https://pacdn.500px.org/1171535/a54cf3d035dad57d6fdbb82b14f625c16f30b5dc/2.jpg?127","role":"3","__v":0}
+{"_id":{"$oid":"5b062034175d660d80ede5ed"},"uid":"YF100001","name":"Java-1","password":"18FCD73EAE8F118B0BF5F4CF5D1D766E","email":"zty1160051490@163.com","authorization":2,"avatar_url":"","role":"","__v":0}
+{"_id":{"$oid":"5b0623cb175d660d80ede5ee"},"uid":"YF100002","name":"Java-2","password":"18FCD73EAE8F118B0BF5F4CF5D1D766E","email":"zty1160051490@163.com","authorization":1,"avatar_url":"","role":"","__v":0}
