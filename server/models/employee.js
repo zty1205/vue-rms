@@ -3,10 +3,7 @@ const Schema = mongoose.Schema
 
 // 企业员工 MongoDB Schema模型  // 这里的验证不通过的话 会在后台报错
 const employeeSchema = new Schema({
-  eid:{
-    type: String,
-    unique: true
-  },
+  eid: String,
   name: String,
   password: {
     type: String,
@@ -36,6 +33,8 @@ const employeeSchema = new Schema({
     default: null  // null 表示未离职
   },
   authority: Number, //权限   2>1>0
+  city: String,
+  doctor: String
 })  // 不能加 s  对应的是MongoDB里叫 employee 的 collection  , { collection: "employee" }
 
 const employee = mongoose.model('employee', employeeSchema)   // 不能加 s  对应的是MongoDB里叫 employee 的 collection

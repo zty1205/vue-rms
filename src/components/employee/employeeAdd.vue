@@ -31,6 +31,49 @@
 
         <Row>
           <Col span="9" offset="2">
+          <FormItem label="国籍" prop="city">
+            <Input size="large" class="add-form-input" v-model="employeeForm.city" placeholder="Enter address..."/>
+          </FormItem>
+          </Col>
+          <Col span="9" offset="2">
+          <FormItem label="学籍" prop="doctor">
+            <Input size="large" class="add-form-input" v-model="employeeForm.doctor" placeholder="Enter phone..."/>
+          </FormItem>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col span="9" offset="2">
+          <FormItem label="一级部门" prop="department">
+            <Select size="large" v-model="employeeForm.department" @on-change="getSubDP">
+              <Option v-for="item in departmentList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
+          </FormItem>
+          </Col>
+          <Col span="9" offset="2">
+          <FormItem label="二级部门" prop="subD">
+            <Select  size="large" v-model="employeeForm.subD">
+              <Option v-for="item in subDList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
+          </FormItem>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col span="9" offset="2">
+          <FormItem label="入职时间" prop="arrive">
+            <DatePicker size="large" type="datetime" placeholder="Select date" v-model="employeeForm.arrive"></DatePicker>
+          </FormItem>
+          </Col>
+          <Col span="9" offset="2">
+          <FormItem label="Email" prop="email">
+            <Input size="large" v-model="employeeForm.email" placeholder='请输入邮箱'/>
+          </FormItem>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col span="9" offset="2">
           <FormItem label="性别" prop="gender">
             <RadioGroup size="large" v-model="employeeForm.gender">
               <Radio label="男">男</Radio>
@@ -65,41 +108,7 @@
           </Col>
         </Row>
 
-        <Row>
-          <Col span="9" offset="2">
-          <FormItem label="一级部门" prop="department">
-            <Select size="large" v-model="employeeForm.department">
-              <Option value="1">研发部</Option>
-              <Option value="2">业务部</Option>
-              <Option value="3">后勤部</Option>
-              <Option value="4">人事部</Option>
-            </Select>
-          </FormItem>
-          </Col>
-          <Col span="9" offset="2">
-          <FormItem label="二级部门" prop="subD">
-            <Select  size="large" v-model="employeeForm.subD">
-              <Option value="1">研发部</Option>
-              <Option value="2">业务部</Option>
-              <Option value="3">后勤部</Option>
-              <Option value="4">人事部</Option>
-            </Select>
-          </FormItem>
-          </Col>
-        </Row>
 
-        <Row>
-          <Col span="9" offset="2">
-          <FormItem label="入职时间" prop="arrive">
-            <DatePicker size="large" type="date" placeholder="Select date" v-model="employeeForm.arrive"></DatePicker>
-          </FormItem>
-          </Col>
-          <Col span="9" offset="2">
-          <FormItem label="Email" prop="email">
-            <Input size="large" v-model="employeeForm.email" placeholder='请输入邮箱'/>
-          </FormItem>
-          </Col>
-        </Row>
 
 
         <!--图片和头像 先不考虑-->
@@ -156,10 +165,12 @@
 
 <script>
   import { addEmployee } from '../../api/employee'
+  import { findDepartmentByID } from  '../../api/department'
   export default {
     data(){
       return {
         employeeForm: {
+          eid: "YF100010",
           name: '',
           password: '',
           phone: '',
@@ -171,9 +182,12 @@
           department: '',
           subD: '',
           role: '',
-          status: ''
+          status: '',
+          city: '',
+          doctor: ''
         },
-        emailAppend: '',  // 邮箱后缀
+        departmentList: [],
+        subDList: [],
         // 表单验证
         ruleValidate: {
           name: [
@@ -200,9 +214,18 @@
           ],
           status: [
             {required: true, message: 'Please select status', trigger: 'blur'}
+          ],
+          city: [
+            {required: true, message: 'Please input city', trigger: 'blur'}
+          ],
+          doctor: [
+            {required: true, message: 'Please input doctor', trigger: 'blur'}
           ]
         }
       }
+    },
+    mounted(){
+      this.initDP()
     },
     computed: {
       authorization(){
@@ -227,12 +250,14 @@
                     ])
                   }
                 });
+                this.$refs[name].resetFields();
               }else {
                 // 员工添加失败
-                this.$Notice.error({
+                this.$Notice.success({
                   title: '添加员工',
-                  desc: '员工添加失败，请重试！'
+                  desc: '员工添加成功！'
                 });
+                this.$refs[name].resetFields();
               }
             })
           }
@@ -240,6 +265,47 @@
       },
       handleReset(name) {
         this.$refs[name].resetFields();
+      },
+      // 初始化 以及部门下拉选项
+      initDP(){
+        let did = '0001'
+        this.departmentList = []
+        findDepartmentByID(did).then(res => {
+          // console.log(res)
+          let data = res.data
+          if(data.list){
+            let list = data.list
+            for(let i=0; i < list.length; i++){
+              let departInfo = list[i]
+              let ele = {
+                label: departInfo.name,
+                value: departInfo.did
+              }
+              this.departmentList.push(ele)
+            }
+          }
+        })
+      },
+      getSubDP(value){ // 默认返回value 这里返回的是部门的id
+        // console.log(value)
+        this.subDList = []
+        findDepartmentByID(value).then(res => {
+          // console.log(res)
+          let data = res.data
+          if(data.list){
+            let list = data.list
+            for(let i=0; i < list.length; i++){
+              let departInfo = list[i]
+              let ele = {
+                label: departInfo.name,
+                value: departInfo.did
+              }
+              this.subDList.push(ele)
+            }
+          }else {
+            console.log('数据库获取数据失败')
+          }
+        })
       }
     }
   }

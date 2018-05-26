@@ -111,6 +111,14 @@
               key: 'address',
             },
             {
+              title: '国籍',
+              key: 'city',
+            },
+            {
+              title: '学历',
+              key: 'doctor',
+            },
+            {
               title: '职位',
               key: 'role',
               render:(h, params) => {

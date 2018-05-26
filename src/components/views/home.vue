@@ -1,20 +1,25 @@
 <template>
-  <div class="layout">
-    <Layout :style="{height: '780px'}">
-      <Sider breakpoint="md" collapsible :collapsed-width="78" v-model="isCollapsed">
-        <home-aside></home-aside>
-        <div slot="trigger"></div>
-      </Sider>
-      <Layout>
-        <Header class="layout-header-bar">
-          <home-header></home-header>
-        </Header>
-        <!-- 路由展示区域 -->
-        <Content :style="{margin: '20px',background: '#fff', minHeight: '220px'}">
-          <router-view :style="{margin: '20px'}"></router-view>
-        </Content>
+  <div v-if="authority">
+    <div class="layout">
+      <Layout :style="{height: '780px'}">
+        <Sider breakpoint="md" collapsible :collapsed-width="78" v-model="isCollapsed">
+          <home-aside></home-aside>
+          <div slot="trigger"></div>
+        </Sider>
+        <Layout>
+          <Header class="layout-header-bar">
+            <home-header></home-header>
+          </Header>
+          <!-- 路由展示区域 -->
+          <Content :style="{margin: '20px',background: '#fff', minHeight: '220px'}">
+            <router-view :style="{margin: '20px'}"></router-view>
+          </Content>
+        </Layout>
       </Layout>
-    </Layout>
+    </div>
+  </div>
+  <div v-else>
+    <Button type="dashed" class="login-btn" @click="login">请登录</Button>
   </div>
 </template>
 
@@ -33,11 +38,19 @@ export default {
         'menu-item',
         this.isCollapsed ? 'collapsed-menu' : ''
       ]
+    },
+    authority(){
+      return this.$store.getters.authorization
     }
   },
   components:{
       HomeAside,
       HomeHeader
+  },
+  methods: {
+    login(){
+      this.$router.push({path: '/login'})
+    }
   }
 }
 </script>
@@ -82,6 +95,9 @@ export default {
   .ivu-menu-submenu .ivu-menu-item-active,
   .ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu .ivu-menu-item-active:hover{
     background: rgba(255,255,255,.8) !important;
+  }
+  .login-btn {
+    margin: 100px auto;
   }
 </style>
 

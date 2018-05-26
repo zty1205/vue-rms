@@ -84,7 +84,7 @@
         </MenuItem>
         <MenuItem name="6-2">
           <router-link to="/home/AttendSalary" class="link-item">
-            考勤/工资
+            工资
           </router-link>
         </MenuItem>
         <MenuItem name="6-3">
